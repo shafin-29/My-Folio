@@ -1,0 +1,936 @@
+{
+  "global": {
+    "openToWork": true,
+    "openToWorkText": "Open to Work · Remote / On-site · Worldwide",
+    "location": "Mumbai, India",
+    "contentUpdated": "02/11/2026",
+    "navItems": [
+      {
+        "href": "/",
+        "label": "Home"
+      },
+      {
+        "href": "/about",
+        "label": "About"
+      },
+      {
+        "href": "/projects",
+        "label": "Projects"
+      },
+      {
+        "href": "/skills",
+        "label": "Skills"
+      },
+      {
+        "href": "/contact",
+        "label": "Contact"
+      }
+    ]
+  },
+  "header": {
+    "home": {
+      "href": "/",
+      "label": "SK",
+      "ariaLabel": "Go to home"
+    },
+    "mobile": {
+      "icon": "ph:arrow-up-right"
+    }
+  },
+  "home": {
+    "title": "Shafin Khan",
+    "name": "Shafin Khan",
+    "titles": ["Applied AI Engineer", "Full Stack Engineer", "AI Engineer", "Software Engineer"],
+    "tagline": "Applied AI Engineer based in Mumbai, India. Two years shipping React, Next.js, Python & Agentic AI. Currently studying Data Science and Applications at IIT Madras.",
+    "cta": {
+      "primary": {
+        "text": "Explore my work",
+        "url": "/projects",
+        "icon": "ph:planet-bold",
+        "ariaLabel": "Explore my projects"
+      },
+      "secondary": {
+        "text": "About me",
+        "url": "/about",
+        "icon": "ph:user-circle-bold",
+        "ariaLabel": "Learn more about me"
+      }
+    },
+    "stats": [
+      {
+        "value": 2,
+        "suffix": "+",
+        "label": "Years Coding"
+      },
+      {
+        "value": 8,
+        "suffix": "",
+        "label": "Tech Stacks"
+      },
+      {
+        "value": 4,
+        "suffix": "",
+        "label": "Projects Delivered"
+      },
+      {
+        "value": 4,
+        "suffix": "",
+        "label": "Domains Exploring"
+      }
+    ],
+    "exploreLabel": "Mission control",
+    "exploreTitle": "Pick a destination",
+    "explore": [
+      {
+        "href": "/about",
+        "title": "About",
+        "text": "Two years of building, a BS at IIT Madras, and a habit of shipping AI-powered products from the ground up.",
+        "icon": "ph:user-focus-bold"
+      },
+      {
+        "href": "/projects",
+        "title": "Projects",
+        "text": "Four delivered projects across AI agents, developer tooling and full-stack apps, each one built to solve a real problem.",
+        "icon": "ph:cube-focus-bold"
+      },
+      {
+        "href": "/skills",
+        "title": "Skills",
+        "text": "The toolkit: React, Next.js, TypeScript, Python, Azure, AWS and friends.",
+        "icon": "ph:atom-bold"
+      }
+    ]
+  },
+  "about": {
+    "title": "About",
+    "label": "Get to know me",
+    "openToWorkText": "Available for opportunities",
+    "descriptionHeader": "",
+    "description": "<p><strong>Hi, I’m Shafin</strong>, an <em>applied AI engineer</em> based in Mumbai, India, with <strong>two years</strong> of experience building production-grade tools and AI-powered applications from the ground up. I’m currently pursuing a BS in <em>Data Science and Applications</em> at the <strong>Indian Institute of Technology Madras (IIT Madras)</strong></p><p>Recently I’ve shipped <strong>Provenance AI</strong>, a real-time safety layer for RAG pipelines, <strong>NeuralNode</strong>, a no-code workflow automation platform, <strong>NightCode</strong>, a CLI AI coding agent, and <strong>Vibe</strong>, an AI web app builder. They span <em>Next.js, React, TypeScript, Python and FastAPI</em>, with Docker and AWS for deployment, and I care about code that’s clean, type-safe and built to last.</p><p>I’m currently focused on <em>AI agents, developer tooling and scalable full-stack products</em>, and I’m open to my next AI or full-stack engineering role, whether remote or on-site, anywhere in the world.</p>",
+    "image": {
+      "url": "/static/images/astronaut.jpg",
+      "size": {
+        "width": 2252,
+        "height": 2526
+      }
+    },
+    "cv": {
+      "download": "Shafin-resume.pdf"
+    },
+    "cta": {
+      "primary": {
+        "text": "Download CV",
+        "url": "/static/documents/Shafin-resume.pdf",
+        "icon": "mdi:download",
+        "ariaLabel": "Download CV as PDF"
+      },
+      "secondary": {
+        "text": "Get in Touch",
+        "url": "/contact",
+        "icon": "mdi:message-text-outline",
+        "ariaLabel": "Go to contact page"
+      }
+    },
+    "highlights": [
+      {
+        "icon": "mdi:react",
+        "title": "React & Next.js",
+        "sub": "Full-stack AI products built end to end with Next.js, React and TypeScript"
+      },
+      {
+        "icon": "andrsrxn:agent",
+        "title": "Agentic AI",
+        "sub": "AI agents, RAG safety layers and LLM integrations with Anthropic, OpenAI and Gemini"
+      },
+      {
+        "icon": "healthicons:integrated-data-and-research-outline-24px",
+        "title": "Python & Data Science",
+        "sub": "FastAPI backends, PyTorch and Scikit-learn, backed by a BS at IIT Madras"
+      },
+      {
+        "icon": "mdi:cloud-outline",
+        "title": "Production Ready",
+        "sub": "Docker and AWS deployments with auth, billing and error monitoring built in"
+      }
+    ],
+    "recommendations": []
+  },
+  "experience": {
+    "title": "Experience",
+    "label": "Where I've worked",
+    "done": {
+      "icon": "emojione:hourglass-done"
+    },
+    "items": []
+  },
+  "projects": {
+    "title": "Projects",
+    "label": "What I've built",
+    "items": [
+      {
+        "title": "Provenance AI",
+        "slug": "provenance-ai",
+        "startDate": "2026",
+        "description": "Provenance AI is a real-time safety layer for RAG pipelines that I designed and built from scratch. It intercepts vector database retrievals before they reach the LLM, filtering stale and quarantined data in under 20ms across four configurable safety modes. An automated remediation engine performs semantic diff analysis and blast radius computation, with multi-channel incident alerting via Resend and Slack. I also shipped a drop-in Python SDK for zero-refactor LangChain integration with end-to-end lineage tracing. Built with a FastAPI backend, Prisma ORM and a Next.js dashboard.",
+        "theme": {
+          "text": "light",
+          "border": "light",
+          "background": "dark"
+        },
+        "thumbnail": "mdi:shield-check",
+        "images": [
+          {
+            "url": "/static/images/prove.png",
+            "alt": "Provenance AI dashboard",
+            "size": {
+              "width": 1280,
+              "height": 800
+            }
+          }
+        ],
+        "url": "",
+        "technologies": [
+          {
+            "class": "devicon:python",
+            "name": "Python"
+          },
+          {
+            "class": "devicon:fastapi",
+            "name": "FastAPI"
+          },
+          {
+            "class": "devicon:nextjs",
+            "name": "Next.js"
+          },
+          {
+            "class": "devicon:typescript",
+            "name": "TypeScript"
+          },
+          {
+            "class": "devicon:prisma",
+            "name": "Prisma"
+          },
+          {
+            "class": "simple-icons:langchain",
+            "name": "LangChain"
+          },
+          {
+            "class": "simple-icons:resend",
+            "name": "Resend"
+          },
+          {
+            "class": "logos:slack-icon",
+            "name": "Slack"
+          }
+        ]
+      },
+      {
+        "title": "NeuralNode",
+        "slug": "neuralnode",
+        "startDate": "2026",
+        "description": "NeuralNode is a full-stack, no-code workflow automation platform I built from scratch. It lets users design, automate and monetize event-driven workflows through a visual drag-and-drop React Flow canvas. It supports multi-node triggers including Webhooks, Stripe events and Google Forms, alongside AI integration nodes for OpenAI, Claude and Gemini. I engineered a production-ready SaaS layer with Better Auth for authentication, Polar for subscription billing, and Sentry for error tracking and AI monitoring.",
+        "theme": {
+          "text": "light",
+          "border": "light",
+          "background": "dark"
+        },
+        "thumbnail": "mdi:graph-outline",
+        "images": [
+          {
+            "url": "/static/images/neur.jpeg",
+            "alt": "NeuralNode workflow canvas",
+            "size": {
+              "width": 1280,
+              "height": 800
+            }
+          }
+        ],
+        "url": "",
+        "technologies": [
+          {
+            "class": "devicon:nextjs",
+            "name": "Next.js"
+          },
+          {
+            "class": "devicon:react",
+            "name": "React"
+          },
+          {
+            "class": "devicon:typescript",
+            "name": "TypeScript"
+          },
+          {
+            "class": "devicon:tailwindcss",
+            "name": "Tailwind CSS"
+          },
+          {
+            "class": "simple-icons:reactflow",
+            "name": "React Flow"
+          },
+          {
+            "class": "logos:stripe",
+            "name": "Stripe"
+          },
+          {
+            "class": "logos:sentry-icon",
+            "name": "Sentry"
+          }
+        ]
+      },
+      {
+        "title": "NightCode",
+        "slug": "nightcode",
+        "startDate": "2026",
+        "description": "NightCode is a terminal-based AI coding agent I am architecting, with an OpenTUI and React-powered interface that lets developers plan, chat and build software directly inside their local projects. It features dual Plan and Build modes with AI SDK streaming, support for multiple AI models including Anthropic and OpenAI, and local project tools for file reading, editing and shell execution. Authentication is handled through Clerk OAuth in the browser, with Polar powering usage-based credit billing.",
+        "theme": {
+          "text": "light",
+          "border": "light",
+          "background": "dark"
+        },
+        "thumbnail": "mdi:console",
+        "images": [
+          {
+            "url": "/static/images/night.png",
+            "alt": "NightCode terminal interface",
+            "size": {
+              "width": 1280,
+              "height": 800
+            }
+          }
+        ],
+        "url": "",
+        "technologies": [
+          {
+            "class": "devicon:typescript",
+            "name": "TypeScript"
+          },
+          {
+            "class": "devicon:react",
+            "name": "React"
+          },
+          {
+            "class": "devicon:nodejs",
+            "name": "Node.js"
+          },
+          {
+            "class": "logos:claude-icon",
+            "name": "Anthropic Claude"
+          },
+          {
+            "class": "logos:openai-icon",
+            "name": "OpenAI"
+          },
+          {
+            "class": "logos:clerk-icon",
+            "name": "Clerk"
+          }
+        ]
+      },
+      {
+        "title": "Vibe",
+        "slug": "vibe",
+        "startDate": "2026",
+        "description": "Vibe is an AI-powered Next.js application generator I designed and developed, converting natural language prompts into production-ready, type-safe web applications. It uses Grok 4 for code generation and E2B sandboxed environments for instant live deployment previews. The scalable backend is built with tRPC for end-to-end type safety, Inngest for reliable background job processing, and Prisma ORM with PostgreSQL for data persistence. It is deployed on AWS with Docker containerization and Clerk authentication for user management.",
+        "theme": {
+          "text": "light",
+          "border": "light",
+          "background": "dark"
+        },
+        "thumbnail": "mdi:creation",
+        "images": [
+          {
+            "url": "/static/images/vibe.png",
+            "alt": "Vibe AI web app builder",
+            "size": {
+              "width": 1280,
+              "height": 800
+            }
+          }
+        ],
+        "url": "",
+        "technologies": [
+          {
+            "class": "devicon:nextjs",
+            "name": "Next.js"
+          },
+          {
+            "class": "devicon:typescript",
+            "name": "TypeScript"
+          },
+          {
+            "class": "simple-icons:trpc",
+            "name": "tRPC"
+          },
+          {
+            "class": "devicon:prisma",
+            "name": "Prisma"
+          },
+          {
+            "class": "devicon:postgresql",
+            "name": "PostgreSQL"
+          },
+          {
+            "class": "simple-icons:inngest",
+            "name": "Inngest"
+          },
+          {
+            "class": "devicon:docker",
+            "name": "Docker"
+          },
+          {
+            "class": "devicon:amazonwebservices",
+            "name": "AWS"
+          },
+          {
+            "class": "logos:clerk-icon",
+            "name": "Clerk"
+          }
+        ]
+      }
+    ],
+    "ctaText": "View Details"
+  },
+  "skills": {
+    "title": "Skills",
+    "label": "My toolkit",
+    "tagline": "Two years of building production-grade apps, picking up the ecosystem along the way.",
+    "marquee": [
+      "React",
+      "Next.js",
+      "JavaScript",
+      "SCSS",
+      "NodeJS",
+      "Redux",
+      "TypeScript",
+      "Python",
+      "PyTorch",
+      "Scikit-learn",
+      "PostgreSQL",
+      "MySQL",
+      "CSS Modules",
+      "REST API",
+      "Docker",
+      "Jest",
+      "Git",
+      "Tailwind CSS",
+      "Mantine UI",
+      "Cypress",
+      "Selenium",
+      "Cucumber / Gherkin",
+      "CI/CD Pipelines",
+      "Postman",
+      "Azure",
+      "AWS",
+      "WebdriverIO",
+      "Bash",
+      "Linux"
+    ],
+    "categories": [
+      {
+        "title": "Frontend",
+        "icon": "mdi:monitor",
+        "categoryKey": "frontend"
+      },
+      {
+        "title": "Backend & Cloud",
+        "icon": "mdi:cloud-outline",
+        "categoryKey": "backend"
+      },
+      {
+        "title": "Testing",
+        "icon": "mdi:flask-outline",
+        "categoryKey": "testing"
+      },
+      {
+        "title": "Tooling & DevOps",
+        "icon": "mdi:wrench-outline",
+        "categoryKey": "tooling"
+      }
+    ],
+    "icons": [
+      {
+        "name": "React",
+        "class": "devicon:react",
+        "level": "100",
+        "category": "frontend"
+      },
+      {
+        "name": "Next.js",
+        "class": "devicon:nextjs",
+        "level": "100",
+        "category": "frontend"
+      },
+      {
+        "name": "Redux",
+        "class": "devicon:redux",
+        "level": "95",
+        "category": "frontend"
+      },
+      {
+        "name": "TypeScript",
+        "class": "devicon:typescript",
+        "level": "95",
+        "category": "frontend"
+      },
+      {
+        "name": "JavaScript",
+        "class": "devicon:javascript",
+        "level": "100",
+        "category": "frontend"
+      },
+      {
+        "name": "HTML5",
+        "class": "devicon:html5",
+        "level": "100",
+        "category": "frontend"
+      },
+      {
+        "name": "CSS Modules",
+        "class": "devicon:css3",
+        "level": "95",
+        "category": "frontend"
+      },
+      {
+        "name": "SCSS",
+        "class": "devicon:sass",
+        "level": "100",
+        "category": "frontend"
+      },
+      {
+        "name": "Tailwind CSS",
+        "class": "devicon:tailwindcss",
+        "level": "90",
+        "category": "frontend"
+      },
+      {
+        "name": "Angular 8+",
+        "class": "devicon:angularjs",
+        "level": "60",
+        "category": "frontend"
+      },
+      {
+        "name": "Flutter",
+        "class": "devicon:flutter",
+        "level": "80",
+        "category": "frontend"
+      },
+      {
+        "name": "Mantine UI",
+        "class": "logos:mantine-icon",
+        "level": "90",
+        "category": "frontend"
+      },
+      {
+        "name": "Bootstrap",
+        "class": "devicon:bootstrap",
+        "level": "80",
+        "category": "frontend"
+      },
+      {
+        "name": "Carbon Design System",
+        "class": "carbon:carbon",
+        "level": "85",
+        "category": "frontend"
+      },
+      {
+        "name": "Material UI",
+        "class": "devicon:materialui",
+        "level": "60",
+        "category": "frontend"
+      },
+      {
+        "name": "Shopify",
+        "class": "logos:shopify",
+        "level": "70",
+        "category": "frontend"
+      },
+      {
+        "name": "NodeJS",
+        "class": "devicon:nodejs",
+        "level": "100",
+        "category": "backend"
+      },
+      {
+        "name": "Python",
+        "class": "devicon:python",
+        "level": "70",
+        "category": "backend"
+      },
+      {
+        "name": "PyTorch",
+        "class": "devicon:pytorch",
+        "level": "70",
+        "category": "backend"
+      },
+      {
+        "name": "Scikit-learn",
+        "class": "devicon:scikitlearn",
+        "level": "70",
+        "category": "backend"
+      },
+      {
+        "name": "PostgreSQL",
+        "class": "devicon:postgresql",
+        "level": "70",
+        "category": "backend"
+      },
+      {
+        "name": "MySQL",
+        "class": "devicon:mysql",
+        "level": "70",
+        "category": "backend"
+      },
+      {
+        "name": "Bun",
+        "class": "devicon:bun",
+        "level": "80",
+        "category": "backend"
+      },
+      {
+        "name": "REST API",
+        "class": "material-symbols:api",
+        "level": "95",
+        "category": "backend"
+      },
+      {
+        "name": "MongoDB",
+        "class": "devicon:mongodb",
+        "level": "85",
+        "category": "backend"
+      },
+      {
+        "name": "Cosmos DB",
+        "class": "devicon:cosmosdb-wordmark",
+        "level": "85",
+        "category": "backend"
+      },
+      {
+        "name": "AWS",
+        "class": "devicon:amazonwebservices",
+        "level": "85",
+        "category": "backend"
+      },
+      {
+        "name": "Azure",
+        "class": "devicon:azure",
+        "level": "85",
+        "category": "backend"
+      },
+      {
+        "name": "Azure Functions",
+        "class": "mdi:function-variant",
+        "level": "85",
+        "category": "backend"
+      },
+      {
+        "name": "Docker",
+        "class": "devicon:docker",
+        "level": "95",
+        "category": "backend"
+      },
+      {
+        "name": "Apache",
+        "class": "devicon:apache",
+        "level": "75",
+        "category": "backend"
+      },
+      {
+        "name": "NGINX",
+        "class": "devicon:nginx",
+        "level": "85",
+        "category": "backend"
+      },
+      {
+        "name": "Jest",
+        "class": "logos:jest",
+        "level": "95",
+        "category": "testing"
+      },
+      {
+        "name": "Cypress",
+        "class": "devicon:cypressio",
+        "level": "90",
+        "category": "testing"
+      },
+      {
+        "name": "Enzyme",
+        "class": "logos:airbnb-icon",
+        "level": "85",
+        "category": "testing"
+      },
+      {
+        "name": "Selenium",
+        "class": "skill-icons:selenium",
+        "level": "90",
+        "category": "testing"
+      },
+      {
+        "name": "WebdriverIO",
+        "class": "logos:webdriverio",
+        "level": "85",
+        "category": "testing"
+      },
+      {
+        "name": "Cucumber / Gherkin",
+        "class": "logos:cucumber",
+        "level": "90",
+        "category": "testing"
+      },
+      {
+        "name": "BrowserStack",
+        "class": "devicon:browserstack",
+        "level": "70",
+        "category": "testing"
+      },
+      {
+        "name": "Appium",
+        "class": "logos:appium",
+        "level": "50",
+        "category": "testing"
+      },
+      {
+        "name": "Git",
+        "class": "devicon:git",
+        "level": "95",
+        "category": "tooling"
+      },
+      {
+        "name": "GitHub Actions",
+        "class": "devicon:githubactions",
+        "level": "80",
+        "category": "tooling"
+      },
+      {
+        "name": "CI/CD Pipelines",
+        "class": "vscode-icons:file-type-azurepipelines",
+        "level": "90",
+        "category": "tooling"
+      },
+      {
+        "name": "DevOps",
+        "class": "devicon:azuredevops",
+        "level": "85",
+        "category": "tooling"
+      },
+      {
+        "name": "Storybook",
+        "class": "devicon:storybook",
+        "level": "85",
+        "category": "tooling"
+      },
+      {
+        "name": "ViteJS",
+        "class": "devicon:vitejs",
+        "level": "70",
+        "category": "tooling"
+      },
+      {
+        "name": "Webpack",
+        "class": "devicon:webpack",
+        "level": "75",
+        "category": "tooling"
+      },
+      {
+        "name": "Babel",
+        "class": "devicon:babel",
+        "level": "70",
+        "category": "tooling"
+      },
+      {
+        "name": "Postman",
+        "class": "devicon:postman",
+        "level": "90",
+        "category": "tooling"
+      },
+      {
+        "name": "Bash",
+        "class": "devicon-plain:bash",
+        "level": "90",
+        "category": "tooling"
+      },
+      {
+        "name": "Linux",
+        "class": "devicon:linux",
+        "level": "90",
+        "category": "tooling"
+      },
+      {
+        "name": "Adobe Experience Manager",
+        "class": "arcticons:adobe-experience-manager",
+        "level": "85",
+        "category": "tooling"
+      },
+      {
+        "name": "Adobe Dynamic Tag Manager",
+        "class": "arcticons:adobe-analytics",
+        "level": "85",
+        "category": "tooling"
+      },
+      {
+        "name": "PowerBI",
+        "class": "logos:microsoft-power-bi",
+        "level": "35",
+        "category": "tooling"
+      },
+      {
+        "name": "JIRA",
+        "class": "devicon:jira",
+        "level": "90",
+        "category": "tooling"
+      },
+      {
+        "name": "Notion",
+        "class": "devicon:notion",
+        "level": "75",
+        "category": "tooling"
+      },
+      {
+        "name": "Cookie Control",
+        "class": "emojione:cookie",
+        "level": "90",
+        "category": "tooling"
+      },
+      {
+        "name": "Split Tunnel VPN",
+        "class": "vscode-icons:file-type-ovpn",
+        "level": "65",
+        "category": "tooling"
+      },
+      {
+        "name": "Claude",
+        "class": "logos:claude-icon",
+        "level": "95",
+        "category": "tooling"
+      }
+    ]
+  },
+  "contact": {
+    "title": "Contact",
+    "label": "Let's connect",
+    "tagline": "Let's work together on your next project",
+    "contactInfo": {
+      "title": "Get in touch.",
+      "description": "The fastest way is email. I reply as soon as I can.",
+      "items": [
+        {
+          "name": "Email",
+          "class": "clarity:email-solid",
+          "value": "shafinkhan2829@gmail.com",
+          "link": "mailto:shafinkhan2829@gmail.com"
+        },
+        {
+          "name": "LinkedIn",
+          "class": "mdi:linkedin",
+          "value": "in/your-linkedin-username",
+          "link": "https://www.linkedin.com/in/shafinkhan29/"
+        },
+        {
+          "name": "GitHub",
+          "class": "mdi:github",
+          "value": "shafin-29",
+          "link": "https://github.com/shafin-29"
+        }
+      ]
+    },
+    "send": {
+      "icon": "ph:rocket-launch-bold",
+      "text": "Send Message"
+    },
+    "sendAgain": {
+      "icon": "ph:arrow-counter-clockwise-bold",
+      "text": "Send another message"
+    },
+    "submitting": {
+      "text": "Submitting..."
+    },
+    "error": {
+      "status": "danger",
+      "headerText": "There was a problem sending the message",
+      "bodyText": "Please try again soon, or contact me directly via email",
+      "icon": "mdi:alert-circle"
+    },
+    "rateLimited": {
+      "headerText": "Slow down, space traveller",
+      "bodyText": "You’ve sent a few messages in a short time. Please try again in a few minutes, or email me directly."
+    },
+    "success": {
+      "status": "success",
+      "headerText": "Message sent!",
+      "bodyText": "I will be in touch with you shortly to answer your message.",
+      "icon": "mdi:check-circle"
+    },
+    "close": {
+      "icon": "mdi:close",
+      "ariaLabel": "Close notification"
+    }
+  },
+  "footer": {
+    "name": "Shafin Khan",
+    "tagline": "Applied AI Engineer crafting intelligent, modern web experiences.",
+    "description": "Applied AI Engineer crafting intelligent, modern web experiences. Available for remote and on-site roles worldwide.",
+    "social": [
+      {
+        "name": "GitHub",
+        "url": "https://github.com/shafin-29",
+        "class": "fa6-brands:github"
+      },
+      {
+        "name": "LinkedIn",
+        "url": "https://www.linkedin.com/in/shafinkhan29/",
+        "class": "devicon:linkedin"
+      }
+    ],
+    "home": {
+      "text": "Shafin Khan",
+      "url": "/",
+      "ariaLabel": "Back to home"
+    },
+    "navigateText": "Navigate",
+    "elsewhereText": "Elsewhere",
+    "connectText": "Connect",
+    "version": "v3.0 · 2026",
+    "madeInPrefix": "Made in",
+    "copyright": "Designed & built with care.",
+    "builtWith": {
+      "pretext": "Built with ",
+      "icon": "mdi:heart",
+      "posttext": " & Next.js"
+    },
+    "cta": {
+      "pretext": "Have a project in mind?",
+      "text": "Let’s build",
+      "accent": "something",
+      "url": "/contact"
+    }
+  },
+  "tour": {
+    "label": "Guided tour",
+    "stops": [
+      {
+        "station": "home",
+        "title": "Gateway hub",
+        "text": "Shafin: applied AI engineer in Mumbai, India, shipping React, Next.js, Python and agentic AI products."
+      },
+      {
+        "station": "about",
+        "title": "Crew habitat",
+        "text": "The person behind the code. Two years of building, now studying Data Science and Applications at IIT Madras."
+      },
+      {
+        "station": "projects",
+        "title": "Fabrication yard",
+        "text": "Four builds orbit the hub, from a RAG safety layer to an AI coding agent. Hover a screen and it comes to life."
+      },
+      {
+        "station": "skills",
+        "title": "Research outpost",
+        "text": "59 technologies in orbit around the gas giant: frontend, backend and cloud, testing and DevOps."
+      },
+      {
+        "station": "contact",
+        "title": "Comms array",
+        "text": "Open to AI and full-stack roles, remote or on-site, worldwide. The dish is listening."
+      }
+    ]
+  }
+}

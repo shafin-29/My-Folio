@@ -1,0 +1,447 @@
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  padding: 14px var(--gutter);
+  pointer-events: none;
+
+  &__bar {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    max-width: var(--max-width);
+    height: 58px;
+    margin: 0 auto;
+    padding: 0 8px 0 14px;
+    border-radius: var(--radius-pill);
+    border: 1px solid transparent;
+    pointer-events: auto;
+    transition:
+      background-color var(--dur-med) ease,
+      border-color var(--dur-med) ease,
+      box-shadow var(--dur-med) ease;
+  }
+
+  &--scrolled &__bar,
+  &--open &__bar {
+    background: var(--surface-strong);
+    border-color: var(--border-color);
+    box-shadow: var(--shadow-card);
+    -webkit-backdrop-filter: blur(18px) saturate(160%);
+    backdrop-filter: blur(18px) saturate(160%);
+  }
+
+  /* Over the open menu (MobileMenu, opaque) there is nothing to blur, and
+     a backdrop blur over its live WebGL warp (and beside the logo's own
+     canvas) is what flickered on Android */
+  &--open &__bar {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  /* ---------- Logo: the LH orbital monogram (BrandMark) ---------- */
+  &__logo {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    height: 42px;
+    padding-right: 0.5rem;
+  }
+
+  &__logo-mark {
+    height: 42px;
+  }
+
+  /* ---------- Desktop links ---------- */
+  &__links {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    padding: 4px;
+    border-radius: var(--radius-pill);
+    background: color-mix(in oklab, var(--bg-tertiary) 45%, transparent);
+    border: 1px solid var(--border-color);
+  }
+
+  &__list {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+  }
+
+  &__indicator {
+    position: absolute;
+    top: 4px;
+    bottom: 4px;
+    left: 0;
+    border-radius: var(--radius-pill);
+    background: var(--gradient-brand);
+    box-shadow: 0 6px 20px -6px var(--glow-violet);
+    transition:
+      transform 0.55s var(--ease-spring),
+      width 0.55s var(--ease-spring),
+      opacity 0.3s ease;
+  }
+
+  &__link {
+    position: relative;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    height: 36px;
+    padding: 0 0.95rem;
+    border-radius: var(--radius-pill);
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-medium);
+    letter-spacing: 0.04em;
+    color: var(--text-secondary);
+    transition: color var(--dur-fast) ease;
+
+    &:hover {
+      color: var(--text-primary);
+    }
+
+    &.is-active {
+      color: var(--accent-contrast);
+    }
+  }
+
+  /* ---------- Actions ---------- */
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  &__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    height: 42px;
+    padding: 0 1.1rem;
+    border-radius: var(--radius-pill);
+    font-size: var(--fs-caption);
+    font-weight: var(--fw-semibold);
+    color: var(--text-primary);
+    background: color-mix(in oklab, var(--accent-primary) 16%, transparent);
+    border: 1px solid color-mix(in oklab, var(--accent-primary) 45%, transparent);
+    transition:
+      background-color var(--dur-fast) ease,
+      box-shadow var(--dur-med) ease;
+
+    &:hover {
+      background: color-mix(in oklab, var(--accent-primary) 28%, transparent);
+      box-shadow: 0 0 24px -4px var(--glow-violet);
+    }
+  }
+
+  &__cta-dot {
+    position: relative;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--status-ok);
+    box-shadow: 0 0 10px var(--status-ok);
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: var(--status-ok);
+      animation: ping 1.8s var(--ease-out) infinite;
+    }
+  }
+
+  &__burger {
+    display: none;
+    position: relative;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1px solid var(--border-strong);
+    background: var(--surface);
+
+    span {
+      position: absolute;
+      left: 13px;
+      width: 18px;
+      height: 1.5px;
+      border-radius: 2px;
+      background: var(--text-primary);
+      transition:
+        transform 0.45s var(--ease-out),
+        top 0.45s var(--ease-out);
+
+      &:first-child {
+        top: 17px;
+      }
+
+      &:last-child {
+        top: 25px;
+      }
+    }
+  }
+
+  &--open &__burger span {
+    &:first-child {
+      top: 21px;
+      transform: rotate(45deg);
+    }
+
+    &:last-child {
+      top: 21px;
+      transform: rotate(-45deg);
+    }
+  }
+}
+
+/* ---------- 3D effects on: the bar is a cockpit HUD ----------
+   The hologram itself is a canvas behind the bar's content (HeaderHud),
+   which also sways the whole bar with the camera. Here the bar drops its
+   glass pill (the hologram's own fill takes over once the page is under
+   it) and its links and buttons take the HUD's look */
+.header--hud {
+  /* The bar is a 3D scene: the hologram (HeaderHud) sits 24px behind the
+     links, scaled up to match so it lines up exactly at rest, and a tilt
+     shows the depth. The sway replaces this transform every frame */
+  .header__bar,
+  &.header--scrolled .header__bar,
+  &.header--open .header__bar {
+    border-color: transparent;
+    background: none;
+    box-shadow: none;
+    transform: perspective(900px);
+    transform-style: preserve-3d;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    will-change: transform;
+  }
+
+  .header-hud {
+    transform: translateZ(-24px) scale(calc(924 / 900));
+  }
+
+  /* Powering on: the logo, links and buttons flicker on one by one */
+  &[data-hud-boot] :is(.header__logo, .header__link, .header__actions > *) {
+    animation: hud-flicker-in 0.6s steps(1, end) both;
+    animation-delay: calc(450ms + var(--hud-i, 0) * 55ms);
+  }
+
+  .header__links {
+    border-color: transparent;
+    background: none;
+  }
+
+  .header__indicator {
+    display: none;
+  }
+
+  .header__link {
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--hud-text);
+    text-shadow:
+      0 0 8px var(--hud-glow),
+      0 0 3px var(--hud-halo);
+
+    &:hover {
+      color: var(--hud-text-strong);
+      animation: hud-glitch 0.32s steps(2) infinite;
+    }
+
+    &.is-active {
+      color: var(--hud-text-strong);
+    }
+  }
+
+  .header__palette,
+  .header__burger,
+  .world-toggle,
+  .theme-toggle {
+    border-color: transparent;
+    background: transparent;
+    color: var(--hud-text);
+    filter: drop-shadow(0 0 6px var(--hud-glow));
+
+    &:hover:not(:disabled) {
+      border-color: transparent;
+      box-shadow: none;
+      color: var(--hud-text-strong);
+    }
+  }
+
+  .header__burger span {
+    background: currentcolor;
+  }
+
+  /* The theme toggle's sun and moon have their own colours off the HUD */
+  .theme-toggle__icon {
+    color: inherit;
+  }
+
+  .header__cta {
+    border-color: transparent;
+    background: transparent;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: var(--fw-medium);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--hud-text);
+    text-shadow:
+      0 0 8px var(--hud-glow),
+      0 0 3px var(--hud-halo);
+
+    &:hover {
+      background: transparent;
+      box-shadow: none;
+      color: var(--hud-text-strong);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .header__link:hover {
+      animation: none;
+    }
+  }
+}
+
+@keyframes hud-flicker-in {
+  0% {
+    opacity: 0;
+  }
+
+  20% {
+    opacity: 0.8;
+  }
+
+  30% {
+    opacity: 0.1;
+  }
+
+  45% {
+    opacity: 1;
+  }
+
+  55% {
+    opacity: 0.35;
+  }
+
+  70%,
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Pointing at a link knocks its text out of register, like a flickering projection */
+@keyframes hud-glitch {
+  0% {
+    text-shadow:
+      -2px 0 rgba(236, 72, 153, 0.75),
+      2px 0 var(--hud-glow);
+  }
+
+  100% {
+    text-shadow:
+      2px 0 rgba(236, 72, 153, 0.75),
+      -2px 0 var(--hud-glow);
+  }
+}
+
+@keyframes ping {
+  75%,
+  100% {
+    transform: scale(2.4);
+    opacity: 0;
+  }
+}
+
+@media (max-width: 1080px) {
+  .header__cta {
+    display: none;
+  }
+}
+
+@media (max-width: 900px) {
+  .header__links {
+    display: none;
+  }
+
+  .header__burger {
+    display: inline-block;
+  }
+}
+
+/* ---------- Scrim: the bar stays readable over the page ----------
+   The HUD is see-through (deliberately no backdrop blur), and round the
+   flat bar's glass pill the page shows too, so once the page scrolls under
+   it a band of the page's own background fades in behind the bar: solid
+   at the top of the screen, gone a little below it. Strong on narrow
+   screens, where the hero's huge name would otherwise read straight
+   through the logo and buttons; subtle on wide ones. A plain gradient (no
+   backdrop-filter), under the header and over the page */
+.header-scrim {
+  --scrim: 0.85;
+
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 39;
+  height: calc(var(--header-h) + 28px);
+  pointer-events: none;
+  opacity: 0;
+  background: linear-gradient(
+    180deg,
+    var(--bg-primary) 0%,
+    color-mix(in oklab, var(--bg-primary) 92%, transparent) 42%,
+    color-mix(in oklab, var(--bg-primary) 72%, transparent) 64%,
+    color-mix(in oklab, var(--bg-primary) 34%, transparent) 83%,
+    transparent 100%
+  );
+  transition: opacity var(--dur-med) ease;
+
+  &--on {
+    opacity: var(--scrim);
+  }
+
+  @media (max-width: 900px) {
+    --scrim: 0.96;
+  }
+
+  /* The tour and free roam hide the header (World.scss), and this with it */
+  html[data-world-mode='tour'] &,
+  html[data-world-mode='explore'] & {
+    opacity: 0;
+  }
+}
+
+/* ⌘K: opens the command palette */
+.header__palette {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border: 1px solid var(--border-strong);
+  border-radius: 50%;
+  color: var(--accent-primary);
+  background: var(--surface);
+  transition:
+    border-color var(--dur-fast) ease,
+    box-shadow var(--dur-med) ease,
+    color var(--dur-fast) ease;
+
+  &:hover {
+    color: var(--accent-secondary);
+    border-color: var(--accent-secondary);
+    box-shadow: 0 0 20px -4px var(--glow-cyan);
+  }
+}

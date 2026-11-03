@@ -1,0 +1,1281 @@
+.world {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+
+  &__backdrop {
+    position: absolute;
+    inset: 0;
+    background: var(--backdrop);
+  }
+
+  &__canvas {
+    position: absolute !important;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 1.4s var(--ease-out);
+  }
+
+  &--ready &__canvas {
+    opacity: 1;
+  }
+
+  /* Soft edge wash keeps copy legible over the brightest parts of the scene */
+  &__veil {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(
+        90deg,
+        color-mix(in oklab, var(--bg-primary) 55%, transparent) 0%,
+        transparent 55%
+      ),
+      linear-gradient(
+        0deg,
+        color-mix(in oklab, var(--bg-primary) 40%, transparent),
+        transparent 30%
+      );
+  }
+}
+
+@media (max-width: 899px) {
+  .world__veil {
+    background: linear-gradient(
+      180deg,
+      transparent 0%,
+      transparent 30%,
+      color-mix(in oklab, var(--bg-primary) 55%, transparent) 55%,
+      color-mix(in oklab, var(--bg-primary) 70%, transparent) 100%
+    );
+  }
+}
+
+/* Sector map shown while the camera flies (and during tours / explore mode) */
+.nav-radar {
+  position: fixed;
+  bottom: 24px;
+  left: 24px;
+  z-index: 45;
+  display: grid;
+  gap: 6px;
+  padding: 10px 10px 8px;
+  pointer-events: none;
+  border-radius: var(--radius-md);
+  opacity: 0;
+  transform: translateY(8px) scale(0.97);
+  transition:
+    opacity 0.45s var(--ease-out),
+    transform 0.45s var(--ease-out);
+
+  &--on {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* Free roam on touch: the move stick has its corner. Tablets lift the map
+     over it; phones have no room, and the station markers show the way */
+  @media (pointer: coarse) {
+    [data-world-mode='explore'] & {
+      bottom: 220px;
+    }
+  }
+
+  @media (pointer: coarse) and (max-width: 699px), (pointer: coarse) and (max-height: 599px) {
+    [data-world-mode='explore'] & {
+      visibility: hidden;
+    }
+  }
+
+  &__title {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent-secondary);
+  }
+
+  &__map {
+    display: block;
+  }
+
+  /* Opened by a previewed course: under the header on the right, where the
+     station is rather than the page's copy */
+  &--aside {
+    top: calc(var(--header-h, 72px) + 16px);
+    right: 24px;
+    bottom: auto;
+    left: auto;
+  }
+
+  @media (max-width: 760px) {
+    bottom: 16px;
+    left: 16px;
+    transform-origin: bottom left;
+    scale: 0.8;
+
+    &--aside {
+      top: calc(var(--header-h, 64px) + 12px);
+      right: 16px;
+      bottom: auto;
+      left: auto;
+      transform-origin: top right;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
+}
+
+/* Dragging something in the world (the contact globe) never selects page text */
+html.world-dragging {
+  user-select: none;
+  cursor: grabbing;
+}
+
+/* Label following the pointer over interactive 3D objects */
+.world-tip {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 70;
+  display: grid;
+  gap: 0.1rem;
+  padding: 0.45rem 0.7rem;
+  border-radius: var(--radius-sm);
+  pointer-events: none;
+  background: var(--surface-strong);
+  transform: translate3d(-200px, -200px, 0);
+  animation: world-tip-in 0.18s ease-out both;
+
+  b {
+    font-size: var(--fs-caption);
+    color: var(--text-primary);
+  }
+
+  span {
+    font-family: var(--font-mono);
+    font-size: var(--fs-tiny);
+    letter-spacing: 0.08em;
+    color: var(--accent-secondary);
+  }
+}
+
+@keyframes world-tip-in {
+  from {
+    opacity: 0;
+  }
+}
+
+/* =============================================================
+   Tour and explore modes: the page steps aside for the world
+   ============================================================= */
+html[data-world-mode='tour'],
+html[data-world-mode='explore'] {
+  overflow: hidden;
+
+  #main-content,
+  .header,
+  .footer,
+  .scroll-progress,
+  .back-to-top {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.6s var(--ease-out);
+  }
+
+  .world__veil {
+    opacity: 0;
+  }
+}
+
+.world__veil {
+  transition: opacity 0.8s var(--ease-out);
+}
+
+/* ----- Guided tour caption card ----- */
+.tour {
+  position: fixed;
+  left: 50%;
+  bottom: clamp(16px, 5vh, 40px);
+  z-index: 80;
+  display: grid;
+  gap: 0.6rem;
+  width: min(560px, calc(100vw - 32px));
+  padding: 1.1rem 1.25rem 1rem;
+  border-radius: var(--radius-lg);
+  background: var(--surface-strong);
+  transform: translateX(-50%);
+  animation: tour-in 0.5s var(--ease-out) both;
+  outline: none;
+
+  &__step {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: var(--fs-tiny);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent-secondary);
+  }
+
+  &__dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent-secondary);
+    box-shadow: 0 0 10px var(--accent-secondary);
+  }
+
+  &__title {
+    font-family: var(--font-display);
+    font-size: clamp(1.3rem, 3vw, 1.75rem);
+    letter-spacing: -0.03em;
+    color: var(--text-primary);
+
+    span {
+      color: var(--text-muted);
+    }
+  }
+
+  &__text {
+    font-size: var(--fs-body);
+    line-height: 1.6;
+    color: var(--text-secondary);
+  }
+
+  &__bar {
+    position: relative;
+    height: 2px;
+    overflow: hidden;
+    border-radius: 2px;
+    background: var(--border-color);
+  }
+
+  &__fill {
+    position: absolute;
+    inset: 0;
+    background: var(--gradient-brand);
+    transform: scaleX(0);
+    transform-origin: left;
+
+    &--run {
+      animation: tour-fill 6.5s linear forwards;
+    }
+  }
+
+  /* Holding the tour (TourOverlay) freezes the countdown too */
+  &:hover &__fill--run,
+  &:has(:focus-visible) &__fill--run {
+    animation-play-state: paused;
+  }
+
+  &__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.6rem;
+    margin-top: 0.2rem;
+  }
+
+  &__btn {
+    min-height: 40px;
+  }
+
+  &__exit {
+    margin-left: auto;
+    font-family: var(--font-mono);
+    font-size: var(--fs-tiny);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+
+    &:hover {
+      color: var(--accent-secondary);
+    }
+  }
+
+  kbd {
+    padding: 0.05rem 0.3rem;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-xs);
+    font-family: var(--font-mono);
+  }
+}
+
+@keyframes tour-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 16px);
+  }
+}
+
+@keyframes jet-flicker {
+  to {
+    transform: scale(0.82, 1.12);
+    opacity: 0.85;
+  }
+}
+
+@keyframes hud-rise {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes tour-fill {
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* ----- Explore mode HUD ----- */
+.explore-hud {
+  --signal: #fbbf24;
+
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  pointer-events: none;
+
+  [data-theme='light'] & {
+    --signal: #b45309;
+  }
+
+  /* The top bar with the signal detector under it, however tall the bar
+     wraps on a narrow screen */
+  &__head {
+    position: absolute;
+    top: 16px;
+    left: 50%;
+    display: grid;
+    justify-items: center;
+    gap: 0.75rem;
+    width: max-content;
+    max-width: calc(100vw - 32px);
+    transform: translateX(-50%);
+  }
+
+  &__top {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem 1rem;
+    max-width: 100%;
+    padding: 0.55rem 0.6rem 0.55rem 1rem;
+    border-radius: var(--radius-pill);
+    background: var(--surface-strong);
+    pointer-events: auto;
+  }
+
+  &__title {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: var(--fs-tiny);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent-secondary);
+  }
+
+  &__dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--status-ok);
+    box-shadow: 0 0 10px var(--status-ok);
+  }
+
+  &__keys {
+    font-size: var(--fs-caption);
+    color: var(--text-secondary);
+  }
+
+  &__exit {
+    padding: 0.4rem 0.8rem;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-pill);
+    font-size: var(--fs-caption);
+    color: var(--text-primary);
+
+    &:hover,
+    &:focus-visible {
+      color: var(--accent-secondary);
+      border-color: var(--accent-secondary);
+    }
+  }
+
+  kbd {
+    display: inline-block;
+    min-width: 1.3rem;
+    margin: 0 0.1rem;
+    padding: 0.05rem 0.3rem;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-xs);
+    font-family: var(--font-mono);
+    font-size: var(--fs-tiny);
+    text-align: center;
+    color: var(--text-primary);
+  }
+
+  /* A knock against a hull: the edges flash and a warning blinks */
+  &__impact {
+    --impact: 0.5;
+
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0;
+    box-shadow: inset 0 0 calc(60px + var(--impact) * 120px)
+      color-mix(in oklab, var(--accent-tertiary) 70%, transparent);
+
+    &--on {
+      animation: hull-contact 0.9s var(--ease-out) both;
+    }
+  }
+
+  &__impact-label {
+    position: absolute;
+    top: calc(50% + 10vmin);
+    left: 50%;
+    padding: 2px 8px;
+    font-family: var(--font-geist-mono), monospace;
+    font-size: var(--fs-tiny);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent-tertiary);
+    border: 1px solid color-mix(in oklab, var(--accent-tertiary) 60%, transparent);
+    border-radius: 4px;
+    transform: translateX(-50%);
+  }
+
+  /* Steering reticle: hold the mouse inside the ring to fly straight (a
+     plain crosshair when the pointer is locked and the mouse looks) */
+  &__reticle {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 14vmin;
+    height: 14vmin;
+    border: 1px dashed color-mix(in oklab, var(--accent-secondary) 45%, transparent);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0.7;
+
+    &::before,
+    &::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      background: var(--accent-secondary);
+      transform: translate(-50%, -50%);
+    }
+
+    &::before {
+      width: 14px;
+      height: 1px;
+    }
+
+    &::after {
+      width: 1px;
+      height: 14px;
+    }
+
+    &--locked {
+      width: 30px;
+      height: 30px;
+      border-style: solid;
+      border-color: color-mix(in oklab, var(--accent-secondary) 55%, transparent);
+      box-shadow: 0 0 14px -2px var(--glow-cyan);
+    }
+  }
+
+  &__lock {
+    position: absolute;
+    top: calc(50% + 34px);
+    left: 50%;
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: var(--fs-tiny);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: var(--text-secondary);
+    text-shadow: 0 1px 8px var(--bg-primary);
+    transform: translateX(-50%);
+    opacity: 0.85;
+  }
+
+  &__autopilot {
+    position: absolute;
+    left: 50%;
+    bottom: clamp(24px, 8vh, 64px);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem 0.55rem 0.5rem 1rem;
+    border-radius: var(--radius-pill);
+    font-size: var(--fs-body-sm);
+    color: var(--text-secondary);
+    background: var(--surface-strong);
+    transform: translateX(-50%);
+    pointer-events: auto;
+    animation: tour-in 0.35s var(--ease-out) both;
+
+    b {
+      color: var(--text-primary);
+    }
+  }
+
+  &__autopilot-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent-tertiary);
+    box-shadow: 0 0 12px var(--accent-tertiary);
+    animation: autopilot-blink 1.2s ease-in-out infinite;
+  }
+
+  /* Hidden signals: the tally in the top bar, the detector under it and
+     the card for each find */
+  &__signals {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.2rem 0.55rem;
+    border: 1px solid color-mix(in oklab, var(--signal) 45%, transparent);
+    border-radius: var(--radius-pill);
+    font-family: var(--font-mono);
+    font-size: var(--fs-tiny);
+    letter-spacing: 0.08em;
+    color: var(--signal);
+
+    &--all {
+      background: color-mix(in oklab, var(--signal) 14%, transparent);
+      box-shadow: 0 0 14px -4px var(--signal);
+    }
+  }
+
+  &__detector {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: var(--font-mono);
+    font-size: var(--fs-tiny);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--signal);
+    text-shadow: 0 1px 8px var(--bg-primary);
+    animation: hud-rise 0.3s var(--ease-out) both;
+  }
+
+  &__detector-bars {
+    display: flex;
+    align-items: flex-end;
+    gap: 3px;
+    height: 14px;
+
+    span {
+      width: 4px;
+      border-radius: 1px;
+      background: color-mix(in oklab, var(--signal) 25%, transparent);
+      transition: background 0.3s ease;
+
+      @for $i from 1 through 5 {
+        &:nth-child(#{$i}) {
+          height: #{$i * 20%};
+        }
+      }
+
+      &.is-on {
+        background: var(--signal);
+        box-shadow: 0 0 8px var(--signal);
+      }
+    }
+  }
+
+  &__signal {
+    position: absolute;
+    top: 50%;
+    right: clamp(16px, 4vw, 48px);
+    display: grid;
+    gap: 0.6rem;
+    width: min(360px, calc(100vw - 32px));
+    padding: 1.1rem 1.2rem;
+    border-color: color-mix(in oklab, var(--signal) 45%, transparent);
+    border-radius: var(--radius-lg);
+    background: var(--surface-strong);
+    box-shadow: 0 0 40px -12px var(--signal);
+    transform: translateY(-50%);
+    pointer-events: auto;
+    animation: signal-in 0.5s var(--ease-out) both;
+  }
+
+  &__signal-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: var(--fs-tiny);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--signal);
+  }
+
+  &__signal-title {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    letter-spacing: -0.02em;
+  }
+
+  &__signal-text {
+    margin: 0;
+    font-size: var(--fs-body-sm);
+    line-height: 1.55;
+    color: var(--text-secondary);
+
+    &--all b {
+      color: var(--signal);
+    }
+  }
+
+  &__signal-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.6rem;
+    margin-top: 0.2rem;
+
+    .btn {
+      padding: 0.55rem 1rem;
+      font-size: var(--fs-caption);
+    }
+  }
+
+  /* Docking: clamps close in from the edges, a light sweeps the view and a
+     bar fills (World.tsx opens the page after dockTime, 1.7s) */
+  &__docking {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    background: radial-gradient(
+      ellipse 70% 60% at 50% 50%,
+      transparent 40%,
+      color-mix(in oklab, var(--bg-primary) 70%, transparent)
+    );
+    animation: dock-dim 0.5s ease both;
+  }
+
+  &__clamp {
+    position: absolute;
+    top: 50%;
+    width: 18vmin;
+    height: 34vmin;
+    border: 2px solid var(--accent-secondary);
+    box-shadow:
+      0 0 24px -6px var(--glow-cyan),
+      inset 0 0 18px -8px var(--glow-cyan);
+
+    &--left {
+      left: 50%;
+      border-right: 0;
+      border-radius: 14px 0 0 14px;
+      animation: clamp-left 1s cubic-bezier(0.7, 0, 0.2, 1) both;
+    }
+
+    &--right {
+      right: 50%;
+      border-left: 0;
+      border-radius: 0 14px 14px 0;
+      animation: clamp-right 1s cubic-bezier(0.7, 0, 0.2, 1) both;
+    }
+  }
+
+  &__sweep {
+    position: absolute;
+    right: 0;
+    left: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent-secondary), transparent);
+    box-shadow: 0 0 24px 4px var(--glow-cyan);
+    animation: dock-sweep 1.3s 0.25s var(--ease-in-out) both;
+  }
+
+  &__docking-text {
+    display: grid;
+    justify-items: center;
+    gap: 0.35rem;
+    font-family: var(--font-mono);
+    font-size: var(--fs-tiny);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+
+    b {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      letter-spacing: -0.01em;
+      text-transform: none;
+      color: var(--text-primary);
+    }
+  }
+
+  &__docking-bar {
+    width: 160px;
+    height: 2px;
+    margin-top: 0.5rem;
+    background: color-mix(in oklab, var(--text-primary) 18%, transparent);
+
+    span {
+      display: block;
+      height: 100%;
+      background: var(--gradient-brand);
+      transform-origin: left;
+      animation: dock-fill 1.6s linear both;
+    }
+  }
+
+  /* One marker per station, positioned every frame (see Waypoints) */
+  &__waypoints {
+    position: absolute;
+    inset: 0;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  &__dock {
+    position: absolute;
+    left: 50%;
+    bottom: clamp(24px, 8vh, 64px);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem 1rem;
+    padding: 0.75rem 0.85rem 0.75rem 1.2rem;
+    border-radius: var(--radius-lg);
+    font-size: var(--fs-body-sm);
+    color: var(--text-secondary);
+    background: var(--surface-strong);
+    transform: translateX(-50%);
+    pointer-events: auto;
+    animation: tour-in 0.35s var(--ease-out) both;
+
+    b {
+      color: var(--text-primary);
+    }
+  }
+
+  /* Touch: the layer under the HUD that takes thumbs on open space. With
+     touch-action: none the browser never claims a drag as a scroll */
+  &__sticks {
+    position: absolute;
+    inset: 0;
+    pointer-events: auto;
+    touch-action: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+  }
+
+  /* A thumbstick: faint in its corner at rest, under the thumb when held */
+  &__stick {
+    --x: -200px;
+    --y: -200px;
+    --kx: 0px;
+    --ky: 0px;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: grid;
+    place-items: center;
+    width: 128px;
+    height: 128px;
+    border: 1px solid var(--border-strong);
+    border-radius: 50%;
+    background: color-mix(in oklab, var(--surface-strong) 55%, transparent);
+    opacity: 0.5;
+    transform: translate(calc(var(--x) - 50%), calc(var(--y) - 50%));
+    transition:
+      transform 0.3s var(--ease-out),
+      opacity 0.3s ease;
+    pointer-events: none;
+
+    &::after {
+      content: attr(data-label);
+      position: absolute;
+      top: calc(100% + 0.45rem);
+      font-family: var(--font-mono);
+      font-size: var(--fs-tiny);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      transition: opacity 0.2s ease;
+    }
+
+    /* Held: straight to the thumb, no glide */
+    &[data-active] {
+      opacity: 1;
+      transition: opacity 0.15s ease;
+
+      &::after {
+        opacity: 0;
+      }
+    }
+  }
+
+  &__stick-knob {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: var(--gradient-brand);
+    box-shadow: 0 0 22px -4px var(--glow-cyan);
+    transform: translate(var(--kx), var(--ky));
+    transition:
+      transform 0.2s var(--ease-out),
+      box-shadow 0.2s ease;
+
+    [data-active] > & {
+      transition: box-shadow 0.2s ease;
+    }
+
+    /* Pushed on past the rim: boost */
+    [data-boost] > & {
+      box-shadow: 0 0 34px 4px var(--glow-cyan);
+    }
+  }
+
+  /* The move stick's boost ring: push the thumb out to it to boost. A ring
+     follows the thumb out from the rim, so you can see how far is left */
+  &__stick-boost,
+  &__stick-charge {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    border-radius: 50%;
+    opacity: 0;
+    transform: translate(-50%, -50%);
+    transition:
+      opacity 0.2s ease,
+      border-color 0.2s ease,
+      box-shadow 0.2s ease;
+    pointer-events: none;
+  }
+
+  &__stick-boost {
+    width: var(--boost-d, 200px);
+    height: var(--boost-d, 200px);
+    border: 1.5px dashed color-mix(in oklab, var(--accent-secondary) 65%, transparent);
+
+    /* Towards the middle of the screen, clear of the thumb pushing forward */
+    &::after {
+      content: 'Boost';
+      position: absolute;
+      top: 50%;
+      left: calc(100% + 0.45rem);
+      font-family: var(--font-mono);
+      font-size: var(--fs-tiny);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent-secondary);
+      text-shadow: 0 1px 8px var(--bg-primary);
+      transform: translateY(-50%);
+    }
+  }
+
+  &__stick-charge {
+    width: var(--thumb, 0px);
+    height: var(--thumb, 0px);
+    border: 2px solid var(--accent-secondary);
+  }
+
+  [data-active] > &__stick-boost {
+    opacity: 1;
+  }
+
+  [data-active] > &__stick-charge {
+    opacity: var(--charge, 0);
+  }
+
+  [data-boost] > &__stick-boost {
+    border-style: solid;
+    border-color: var(--accent-secondary);
+    box-shadow:
+      0 0 24px -2px var(--glow-cyan),
+      inset 0 0 18px -6px var(--glow-cyan);
+  }
+
+  /* Boosting: a rocket jet fires under the middle of the view (BoostJet),
+     its flame longer the faster you go */
+  &__jet {
+    --thrust: 0;
+
+    position: absolute;
+    top: calc(50% + 60px);
+    left: 50%;
+    display: grid;
+    justify-items: center;
+    opacity: 0;
+    transform: translate(-50%, 8px) scale(0.9);
+    transition:
+      opacity 0.2s ease,
+      transform 0.25s var(--ease-out);
+
+    &[data-on] {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+  }
+
+  &__rocket {
+    position: relative;
+    z-index: 1;
+    filter: drop-shadow(0 0 6px var(--glow-violet));
+  }
+
+  &__rocket-window {
+    fill: var(--bg-primary);
+  }
+
+  &__flame {
+    width: 11px;
+    height: 34px;
+    margin-top: -3px;
+    border-radius: 50% / 25% 25% 75% 75%;
+    background: linear-gradient(
+      to bottom,
+      #fff 0%,
+      #a5f3fc 22%,
+      var(--accent-secondary) 48%,
+      color-mix(in oklab, var(--gradient-start) 70%, transparent) 78%,
+      transparent 100%
+    );
+    box-shadow: 0 0 16px 2px var(--glow-cyan);
+    transform-origin: top center;
+    scale: 1 calc(0.65 + var(--thrust) * 0.85);
+    animation: jet-flicker 0.11s ease-in-out infinite alternate;
+  }
+
+  &__jet-label {
+    position: absolute;
+    top: 7px;
+    left: calc(100% + 0.5rem);
+    font-family: var(--font-mono);
+    font-size: var(--fs-tiny);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent-secondary);
+    text-shadow: 0 1px 8px var(--bg-primary);
+  }
+
+  /* Rise and sink, stacked over the look stick's corner (centred on its
+     rest, ExploreHud restInset), clear of the markers riding the edge */
+  &__lift {
+    position: absolute;
+    right: 72px;
+    bottom: 200px;
+    display: grid;
+    gap: 0.5rem;
+    pointer-events: auto;
+
+    button {
+      display: grid;
+      place-items: center;
+      width: 48px;
+      height: 48px;
+      border: 1px solid var(--border-strong);
+      border-radius: 50%;
+      color: var(--text-primary);
+      background: color-mix(in oklab, var(--surface-strong) 70%, transparent);
+      touch-action: none;
+    }
+  }
+}
+
+/* Phones held upright: the autopilot's status and the dock prompt sit in the
+   head, under the top bar, clear of the thumbsticks (ExploreHud) */
+.explore-hud__head {
+  .explore-hud__autopilot,
+  .explore-hud__dock {
+    position: static;
+    max-width: 100%;
+    transform: none;
+    animation-name: hud-rise;
+  }
+}
+
+/* Short screens (a phone on its side): rise and sink beside the look stick,
+   not over it, where they would reach the top bar */
+@media (max-height: 500px) {
+  .explore-hud__lift {
+    right: 176px;
+    bottom: 60px;
+  }
+}
+
+/* A station marker: a diamond on its beacon with its number, name and
+   distance; off screen it rides the edge, its arrow pointing the way */
+.waypoint {
+  --turn: 0rad;
+  --tone: var(--accent-secondary);
+
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+  width: 0;
+  height: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--text-primary);
+  pointer-events: auto;
+  will-change: transform, opacity;
+
+  &__mark {
+    position: absolute;
+    top: -9px;
+    left: -9px;
+    width: 18px;
+    height: 18px;
+    border: 1.5px solid var(--tone);
+    border-radius: 3px;
+    box-shadow:
+      0 0 12px -2px var(--tone),
+      inset 0 0 8px -3px var(--tone);
+    transform: rotate(45deg);
+    transition:
+      transform 0.25s var(--ease-out),
+      border-color 0.2s ease;
+  }
+
+  &__arrow {
+    position: absolute;
+    top: -7px;
+    left: -7px;
+    display: none;
+    width: 14px;
+    height: 14px;
+    border-top: 2px solid var(--tone);
+    border-right: 2px solid var(--tone);
+    filter: drop-shadow(0 0 6px var(--tone));
+    transform: rotate(var(--turn)) translateX(16px) rotate(45deg);
+  }
+
+  &__text {
+    position: absolute;
+    top: -15px;
+    left: 18px;
+    display: grid;
+    gap: 0.1rem;
+    padding: 0.3rem 0.55rem;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-sm, 8px);
+    font-family: var(--font-mono);
+    font-size: var(--fs-tiny);
+    letter-spacing: 0.08em;
+    line-height: 1.2;
+    text-align: left;
+    white-space: nowrap;
+    text-transform: uppercase;
+    background: color-mix(in oklab, var(--surface-strong) 80%, transparent);
+    backdrop-filter: blur(6px);
+  }
+
+  &__name {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--text-primary);
+
+    kbd {
+      min-width: 1.05rem;
+      margin: 0;
+      padding: 0 0.2rem;
+      border-color: color-mix(in oklab, var(--tone) 60%, transparent);
+      color: var(--tone);
+    }
+  }
+
+  &__km {
+    color: var(--text-muted);
+  }
+
+  &:hover,
+  &:focus-visible {
+    outline: none;
+
+    .waypoint__mark {
+      transform: rotate(45deg) scale(1.3);
+    }
+
+    .waypoint__text {
+      border-color: var(--tone);
+    }
+  }
+
+  /* Off screen: the arrow points the way; the label sits inwards of it */
+  &--edge {
+    .waypoint__mark {
+      transform: rotate(45deg) scale(0.6);
+    }
+
+    .waypoint__arrow {
+      display: block;
+    }
+
+    .waypoint__text {
+      top: calc(-15px - sin(var(--turn)) * 34px);
+      left: auto;
+      right: calc(cos(var(--turn)) * 34px);
+      transform: translateX(calc(50% - cos(var(--turn)) * 50%));
+    }
+  }
+
+  &--course {
+    --tone: var(--accent-tertiary);
+
+    .waypoint__mark {
+      animation: waypoint-pulse 1.2s ease-in-out infinite;
+    }
+  }
+}
+
+@keyframes hull-contact {
+  0% {
+    opacity: calc(0.6 + var(--impact) * 0.4);
+  }
+
+  12%,
+  30% {
+    opacity: calc(0.35 + var(--impact) * 0.4);
+  }
+
+  20% {
+    opacity: calc(0.7 + var(--impact) * 0.3);
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes signal-in {
+  from {
+    opacity: 0;
+    transform: translate(24px, -50%);
+  }
+}
+
+@keyframes dock-dim {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes clamp-left {
+  from {
+    transform: translate(-48vw, -50%);
+  }
+
+  to {
+    transform: translate(-100%, -50%) translateX(-6vmin);
+  }
+}
+
+@keyframes clamp-right {
+  from {
+    transform: translate(48vw, -50%);
+  }
+
+  to {
+    transform: translate(100%, -50%) translateX(6vmin);
+  }
+}
+
+@keyframes dock-sweep {
+  0% {
+    top: 0;
+    opacity: 0;
+  }
+
+  15% {
+    opacity: 1;
+  }
+
+  100% {
+    top: 100%;
+    opacity: 0;
+  }
+}
+
+@keyframes dock-fill {
+  from {
+    transform: scaleX(0);
+  }
+
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes autopilot-blink {
+  50% {
+    opacity: 0.35;
+  }
+}
+
+@keyframes waypoint-pulse {
+  50% {
+    box-shadow:
+      0 0 22px 2px var(--tone),
+      inset 0 0 10px -2px var(--tone);
+  }
+}
+
+/* A locked pointer is hidden: so is the cursor ring that trails it */
+html[data-pointer-lock] {
+  .cursor__ring,
+  .cursor__dot {
+    opacity: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .waypoint__text {
+    padding: 0.2rem 0.45rem;
+  }
+
+  .waypoint__km {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tour,
+  .explore-hud__dock,
+  .explore-hud__autopilot {
+    animation: none;
+  }
+
+  .waypoint--course .waypoint__mark,
+  .explore-hud__autopilot-dot,
+  .explore-hud__signal,
+  .explore-hud__detector,
+  .explore-hud__clamp,
+  .explore-hud__sweep,
+  .explore-hud__flame {
+    animation: none;
+  }
+}

@@ -1,0 +1,9 @@
+.next
+.vscode
+.claude
+components/IconifyLoader/iconify-bundle.json
+test-results
+playwright-report
+blob-report
+# Vendored from three/examples/jsm/libs/basis (KTX2 texture transcoder)
+public/static/basis

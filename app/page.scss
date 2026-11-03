@@ -1,0 +1,448 @@
+/* =============================================================
+   "Orbit" — global app shell + shared page system
+   Pages, headings, buttons, chips, glass cards and utilities
+   shared by every route.
+   ============================================================= */
+
+html {
+  scroll-behavior: smooth;
+}
+
+html,
+body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: var(--lh-body);
+  -webkit-font-smoothing: antialiased;
+  /* clip, not hidden: hidden would make the body a scroll container and break position: sticky */
+  overflow-x: clip;
+}
+
+::selection {
+  background: color-mix(in oklab, var(--accent-primary) 45%, transparent);
+  color: var(--text-primary);
+}
+
+#main-content {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+}
+
+/* =============================================================
+   Page layout — every route renders one <section class="page">
+   ============================================================= */
+.page {
+  position: relative;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: calc(var(--header-h) + clamp(3rem, 9vh, 6.5rem)) var(--gutter) clamp(4rem, 10vh, 7rem);
+}
+
+.page-head {
+  position: relative;
+  display: grid;
+  gap: 1.25rem;
+  max-width: 44rem;
+  margin-bottom: clamp(3rem, 8vh, 5.5rem);
+
+  /* Under the eyebrow: where the camera is docked (StationReadout) */
+  &__station {
+    display: flex;
+    margin-top: 0.85rem;
+  }
+
+  &--center {
+    margin-inline: auto;
+    text-align: center;
+    justify-items: center;
+  }
+
+  &--center &__station {
+    justify-content: center;
+  }
+
+  /* Leaves the right side of the header free for the 3D station on wide screens */
+  &--stage {
+    min-height: clamp(18rem, 44vh, 28rem);
+    align-content: center;
+  }
+
+  /* Narrow screens: the station floats in this space above the title */
+  &__stage {
+    display: none;
+  }
+}
+
+@media (max-width: 899px), (max-aspect-ratio: 11 / 10) {
+  .page-head--stage {
+    min-height: 0;
+  }
+
+  .page-head__stage {
+    display: block;
+    height: clamp(11rem, 30svh, 18rem);
+    margin-top: calc(-1 * clamp(1.5rem, 5vh, 3rem));
+  }
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--tr-label);
+  text-transform: uppercase;
+  color: var(--accent-secondary);
+
+  &__index {
+    display: inline-grid;
+    place-items: center;
+    min-width: 2.25rem;
+    height: 1.5rem;
+    padding: 0 0.5rem;
+    border: 1px solid color-mix(in oklab, var(--accent-secondary) 45%, transparent);
+    border-radius: var(--radius-pill);
+    color: var(--text-primary);
+    background: color-mix(in oklab, var(--accent-secondary) 12%, transparent);
+    letter-spacing: 0.08em;
+  }
+
+  &__line {
+    width: 2.5rem;
+    height: 1px;
+    background: linear-gradient(90deg, var(--accent-secondary), transparent);
+  }
+}
+
+.page-title {
+  font-family: var(--font-display);
+  font-size: var(--fs-display);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-tight);
+  letter-spacing: var(--tr-display);
+  text-wrap: balance;
+}
+
+.page-sub {
+  max-width: 38rem;
+  font-size: var(--fs-body-lg);
+  color: var(--text-secondary);
+  text-wrap: pretty;
+}
+
+.text-gradient {
+  background: var(--gradient-brand);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: text-gradient-pan 8s var(--ease-in-out) infinite alternate;
+}
+
+@keyframes text-gradient-pan {
+  to {
+    background-position: 100% 0;
+  }
+}
+
+/* =============================================================
+   Glass surfaces
+   ============================================================= */
+.glass {
+  position: relative;
+  background: var(--surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  backdrop-filter: blur(14px) saturate(140%);
+}
+
+/* Mouse-follow spotlight — pair with useSpotlight() which sets --mx / --my */
+.spotlight {
+  isolation: isolate;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    background: radial-gradient(
+      420px circle at var(--mx, 50%) var(--my, -20%),
+      color-mix(in oklab, var(--accent-primary) 18%, transparent),
+      transparent 60%
+    );
+    opacity: 0;
+    transition: opacity var(--dur-med) ease;
+    pointer-events: none;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: radial-gradient(
+      260px circle at var(--mx, 50%) var(--my, -20%),
+      var(--accent-secondary),
+      var(--accent-primary) 40%,
+      transparent 70%
+    );
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity var(--dur-med) ease;
+    pointer-events: none;
+  }
+
+  &:hover::before,
+  &:hover::after,
+  &:focus-visible::before,
+  &:focus-visible::after {
+    opacity: 1;
+  }
+}
+
+/* =============================================================
+   Chips
+   ============================================================= */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.3rem 0.7rem;
+  font-family: var(--font-mono);
+  font-size: var(--fs-tiny);
+  font-weight: var(--fw-medium);
+  letter-spacing: 0.04em;
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-pill);
+  background: color-mix(in oklab, var(--bg-tertiary) 55%, transparent);
+  white-space: nowrap;
+}
+
+/* =============================================================
+   Buttons
+   ============================================================= */
+.btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  min-height: 3.25rem;
+  padding: 0 1.6rem;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-sans);
+  font-size: var(--fs-body-sm);
+  font-weight: var(--fw-semibold);
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  isolation: isolate;
+  overflow: hidden;
+  transition:
+    transform var(--dur-med) var(--ease-out),
+    box-shadow var(--dur-med) var(--ease-out),
+    color var(--dur-fast) ease;
+
+  svg {
+    flex-shrink: 0;
+    transition: transform var(--dur-med) var(--ease-out);
+  }
+
+  &:hover svg:last-child:not(:first-child) {
+    transform: translateX(3px);
+  }
+
+  &:active {
+    transform: scale(0.97);
+  }
+
+  /* Gradient fill with a light sweep on hover */
+  &--primary {
+    color: var(--accent-contrast);
+    background: var(--gradient-brand);
+    background-size: 160% 100%;
+    box-shadow:
+      0 10px 30px -10px var(--glow-violet),
+      inset 0 1px 0 rgba(255, 255, 255, 0.35);
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background: linear-gradient(
+        110deg,
+        transparent 20%,
+        rgba(255, 255, 255, 0.45) 45%,
+        transparent 70%
+      );
+      transform: translateX(-120%);
+      transition: transform 0.8s var(--ease-out);
+    }
+
+    &:hover {
+      box-shadow:
+        0 16px 44px -10px var(--glow-violet),
+        0 0 0 4px color-mix(in oklab, var(--accent-primary) 20%, transparent);
+
+      &::after {
+        transform: translateX(120%);
+      }
+    }
+  }
+
+  /* Glass pill with a rotating conic border on hover */
+  &--ghost {
+    color: var(--text-primary);
+    background: var(--surface);
+    border: 1px solid var(--border-strong);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset: -1px;
+      z-index: -1;
+      border-radius: inherit;
+      padding: 1px;
+      background: conic-gradient(
+        from var(--spin),
+        transparent 0 60%,
+        var(--accent-secondary) 75%,
+        var(--accent-primary) 90%,
+        transparent
+      );
+      -webkit-mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      opacity: 0;
+      transition: opacity var(--dur-med) ease;
+      animation: spin-border 2.4s linear infinite;
+    }
+
+    &:hover {
+      background: var(--surface-hover);
+
+      &::before {
+        opacity: 1;
+      }
+    }
+  }
+}
+
+@keyframes spin-border {
+  to {
+    --spin: 360deg;
+  }
+}
+
+.magnet {
+  display: inline-flex;
+}
+
+/* =============================================================
+   Next-page navigation shown at the end of every route
+   ============================================================= */
+.page-nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: clamp(4rem, 10vh, 6rem);
+}
+
+/* =============================================================
+   Static renders shown when WebGL is unavailable
+   (World sets html[data-world='off']). Positioned where the
+   3D station would be: right of the copy, or above it on narrow screens.
+   ============================================================= */
+.station-fallback {
+  display: none;
+}
+
+[data-world='off'] .station-fallback {
+  position: absolute;
+  top: calc(var(--header-h) + 3rem);
+  right: var(--gutter);
+  z-index: -1;
+  display: block;
+  width: min(36vw, 28rem);
+  height: auto;
+  filter: drop-shadow(0 30px 60px var(--glow-violet));
+  animation: fallback-float 7s var(--ease-in-out) infinite alternate;
+  pointer-events: none;
+}
+
+@keyframes fallback-float {
+  to {
+    transform: translateY(-18px) rotate(-2deg);
+  }
+}
+
+@media (max-width: 899px), (max-aspect-ratio: 11 / 10) {
+  [data-world='off'] .station-fallback {
+    top: calc(var(--header-h) + 0.5rem);
+    left: 50%;
+    right: auto;
+    width: min(62vw, 17rem);
+    margin-left: min(-31vw, -8.5rem);
+  }
+}
+
+/* =============================================================
+   Responsive
+   ============================================================= */
+@media (max-width: 640px) {
+  .page {
+    padding-top: calc(var(--header-h) + 2.5rem);
+  }
+
+  .btn {
+    min-height: 3rem;
+    padding: 0 1.3rem;
+  }
+}
+
+/* Pulse on a page element picked out in the 3D world (useWorldFocus) */
+.world-ping {
+  animation: world-ping 2.2s var(--ease-out);
+}
+
+@keyframes world-ping {
+  0%,
+  35% {
+    box-shadow:
+      0 0 0 2px var(--accent-secondary),
+      0 0 40px -4px var(--glow-cyan);
+  }
+}
+
+/* Hovering something you can use in the 3D world */
+html[data-world-hover='point'] body {
+  cursor: pointer;
+}
+
+html[data-world-hover='grab'] body {
+  cursor: grab;
+}
+
+html[data-world-hover='grab'] body:active {
+  cursor: grabbing;
+}

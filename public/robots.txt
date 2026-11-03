@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+
+Sitemap: https://portfolio.ShafinKhan.com/sitemap.xml

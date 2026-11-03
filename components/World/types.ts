@@ -1,0 +1,24 @@
+import type { ThreeElements } from '@react-three/fiber';
+
+export type GroupProps = ThreeElements['group'];
+
+/** Content the world needs from content.json (serialisable, passed from the root layout) */
+export interface WorldContent {
+  projects: {
+    title: string;
+    slug: string;
+    /** Iconify name of the project's icon: its screen's art when it has no screenshots */
+    icon: string;
+    /**
+     * Up to four screenshots; `tall` marks full-page captures, which scroll on
+     * screen, and `width` is the source's width in pixels
+     */
+    images: { url: string; tall: boolean; width: number }[];
+  }[];
+  skills: { name: string; icon: string; category: string }[];
+  categories: string[];
+  /** Guided tour captions, one per stop */
+  tour: { station: string; title: string; text: string }[];
+  /** The CV, which one of free roam's hidden signals carries */
+  cv: { url: string; name: string };
+}

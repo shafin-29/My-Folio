@@ -1,0 +1,303 @@
+/* =============================================================
+   Hero — copy on the left, the 3D astronaut owns the right side
+   (on narrow screens it floats in .hero__stage above the copy)
+   ============================================================= */
+.hero {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 100svh;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: calc(var(--header-h) + 2rem) var(--gutter) 7.5rem;
+
+  &__stage {
+    display: none;
+  }
+
+  &__content {
+    position: relative;
+    display: grid;
+    justify-items: start;
+    gap: 1.4rem;
+    max-width: 40rem;
+  }
+
+  /* ---------- Availability badge ---------- */
+  &__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.45rem 0.95rem 0.45rem 0.75rem;
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--status-ok-br);
+    background: var(--status-ok-bg);
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    color: var(--text-primary);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    animation: hero-fade 0.9s var(--ease-out) both;
+  }
+
+  &__badge-dot {
+    position: relative;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--status-ok);
+    box-shadow: 0 0 12px var(--status-ok);
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: var(--status-ok);
+      animation: ping 1.8s var(--ease-out) infinite;
+    }
+  }
+
+  /* The availability badge and, beside it, where the camera is docked */
+  &__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.6rem 1rem;
+  }
+
+  &__station {
+    animation: hero-fade 0.9s var(--ease-out) 0.05s both;
+  }
+
+  &__greeting {
+    font-family: var(--font-mono);
+    font-size: var(--fs-body-sm);
+    color: var(--accent-secondary);
+    letter-spacing: 0.04em;
+    animation: hero-fade 0.9s var(--ease-out) 0.1s both;
+  }
+
+  /* ---------- Name ---------- */
+  &__name {
+    display: grid;
+    font-family: var(--font-display);
+    font-size: var(--fs-hero);
+    font-weight: var(--fw-black);
+    line-height: var(--lh-hero);
+    letter-spacing: -0.055em;
+    margin-left: -0.04em;
+  }
+
+  &__line {
+    display: block;
+    padding-bottom: 0.06em;
+  }
+
+  /* ---------- Role rotator ---------- */
+  &__role {
+    min-height: 1.6em;
+    font-family: var(--font-mono);
+    font-size: clamp(1rem, 1.7vw, 1.25rem);
+    font-weight: var(--fw-medium);
+    color: var(--text-primary);
+    animation: hero-fade 0.9s var(--ease-out) 0.9s both;
+  }
+
+  &__role-line {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  &__role-prompt {
+    color: var(--accent-primary);
+  }
+
+  &__role-caret {
+    width: 0.55em;
+    height: 1.1em;
+    background: var(--accent-secondary);
+    box-shadow: 0 0 10px var(--accent-secondary);
+    animation: caret 1s steps(1) infinite;
+  }
+
+  &__tag {
+    max-width: 34rem;
+    font-size: var(--fs-body-lg);
+    color: var(--text-secondary);
+    text-wrap: pretty;
+    animation: hero-fade 0.9s var(--ease-out) 1s both;
+  }
+
+  &__ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.9rem;
+    margin-top: 0.6rem;
+    animation: hero-fade 0.9s var(--ease-out) 1.15s both;
+  }
+
+  /* ---------- HUD readout ---------- */
+  &__hud {
+    position: absolute;
+    left: var(--gutter);
+    right: var(--gutter);
+    bottom: 2rem;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1.5rem;
+    animation: hero-fade 1s var(--ease-out) 1.4s both;
+  }
+
+  &__hud-stats {
+    display: flex;
+    gap: 2.2rem;
+    margin: 0;
+
+    div {
+      display: grid;
+      gap: 0.2rem;
+    }
+
+    dt {
+      font-family: var(--font-mono);
+      font-size: var(--fs-tiny);
+      letter-spacing: var(--tr-label);
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    dd {
+      margin: 0;
+      font-family: var(--font-mono);
+      font-size: var(--fs-xs);
+      color: var(--text-primary);
+      font-variant-numeric: tabular-nums;
+    }
+  }
+
+  &__scroll {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7rem;
+    font-family: var(--font-mono);
+    font-size: var(--fs-tiny);
+    letter-spacing: var(--tr-label);
+    text-transform: uppercase;
+    color: var(--text-secondary);
+  }
+
+  &__scroll-mouse {
+    position: relative;
+    width: 22px;
+    height: 34px;
+    border-radius: 12px;
+    border: 1.5px solid var(--border-strong);
+  }
+
+  &__scroll-wheel {
+    position: absolute;
+    top: 6px;
+    left: 50%;
+    width: 3px;
+    height: 7px;
+    margin-left: -1.5px;
+    border-radius: 2px;
+    background: var(--accent-secondary);
+    animation: scroll-wheel 1.8s var(--ease-in-out) infinite;
+  }
+
+  &__marquee {
+    position: relative;
+    z-index: 1;
+    border-block: 1px solid var(--border-color);
+    background: color-mix(in oklab, var(--bg-primary) 35%, transparent);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+  }
+}
+
+@keyframes hero-fade {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+    filter: blur(8px);
+  }
+
+  /* filter: none (not blur(0)) so glass inside keeps blurring the 3D scene */
+  to {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+
+@keyframes caret {
+  50% {
+    opacity: 0;
+  }
+}
+
+@keyframes scroll-wheel {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  70% {
+    transform: translateY(12px);
+    opacity: 0;
+  }
+
+  100% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+}
+
+/* Narrow / portrait: astronaut above, copy below */
+@media (max-width: 899px), (max-aspect-ratio: 11 / 10) {
+  .hero {
+    justify-content: flex-start;
+    padding-top: calc(var(--header-h) + 0.5rem);
+    padding-bottom: 8rem;
+
+    &__stage {
+      display: block;
+      height: clamp(12rem, 34svh, 22rem);
+    }
+
+    &__content {
+      max-width: 44rem;
+    }
+  }
+}
+
+@media (max-width: 640px) {
+  .hero {
+    padding-bottom: 7rem;
+
+    &__hud-stats {
+      gap: 1.2rem;
+    }
+
+    &__scroll {
+      display: none;
+    }
+
+    &__ctas {
+      width: 100%;
+
+      .magnet {
+        flex: 1 1 auto;
+      }
+
+      .btn {
+        width: 100%;
+      }
+    }
+  }
+}
