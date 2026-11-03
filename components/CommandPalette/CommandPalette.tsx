@@ -234,14 +234,14 @@ export function CommandPalette({ data }: { data: PaletteData }) {
         case 'date':
           print(
             new Date().toLocaleString('en-GB', {
-              timeZone: 'Europe/London',
+              timeZone: 'Asia/Kolkata',
               dateStyle: 'full',
               timeStyle: 'short',
-            }) + ' (Peterborough)'
+            }) + ' (Mumbai)'
           );
           return true;
         case 'ping':
-          print('PING peterborough.uk (52.57°N, 0.24°W): 64 bytes, time=0.000042 ly', 'ok');
+          print('PING Mumbai.India (52.57°N, 0.24°W): 64 bytes, time=0.000042 ly', 'ok');
           return true;
         case 'rm':
           print('Nice try.', 'warn');
@@ -415,15 +415,15 @@ export function CommandPalette({ data }: { data: PaletteData }) {
     const terminal: Command[] =
       q && terminalWords.includes(word)
         ? [
-            {
-              id: 'terminal',
-              group: 'Terminal',
-              label: `Run “${query.trim()}”`,
-              icon: 'ph:terminal-window-bold',
-              hint: '↵',
-              run: () => runTerminal(query),
-            },
-          ]
+          {
+            id: 'terminal',
+            group: 'Terminal',
+            label: `Run “${query.trim()}”`,
+            icon: 'ph:terminal-window-bold',
+            hint: '↵',
+            run: () => runTerminal(query),
+          },
+        ]
         : [];
     const matched = commands
       .map((command) => ({
@@ -438,7 +438,7 @@ export function CommandPalette({ data }: { data: PaletteData }) {
       .sort((a, b) =>
         q
           ? b.rank - a.rank ||
-            groupOrder.indexOf(a.command.group) - groupOrder.indexOf(b.command.group)
+          groupOrder.indexOf(a.command.group) - groupOrder.indexOf(b.command.group)
           : groupOrder.indexOf(a.command.group) - groupOrder.indexOf(b.command.group)
       )
       .map((r) => r.command);

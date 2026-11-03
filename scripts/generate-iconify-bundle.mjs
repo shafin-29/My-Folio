@@ -15,11 +15,12 @@
 import { readFile, writeFile, readdir } from 'fs/promises';
 import { createRequire } from 'module';
 import path from 'path';
+import { fileURLToPath } from 'url';
 import { getIcons } from '@iconify/utils';
 
 const require = createRequire(import.meta.url);
 
-const ROOT = new URL('..', import.meta.url).pathname;
+const ROOT = fileURLToPath(new URL('..', import.meta.url));
 const OUT = path.join(ROOT, 'components/IconifyLoader/iconify-bundle.json');
 const PREFIXES_OUT = path.join(ROOT, 'components/IconifyLoader/iconify-prefixes.json');
 // "prefix:name" in JSON / JSX attributes, or 'prefix:name' in TS expressions

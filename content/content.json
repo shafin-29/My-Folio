@@ -98,6 +98,12 @@
         "title": "Skills",
         "text": "The toolkit: React, Next.js, TypeScript, Python, Azure, AWS and friends.",
         "icon": "ph:atom-bold"
+      },
+      {
+        "href": "/contact",
+        "title": "Contact",
+        "text": "Get in touch: open to new opportunities, collaborations, and discussions about AI and engineering.",
+        "icon": "ph:paper-plane-tilt-bold"
       }
     ]
   },
@@ -115,12 +121,12 @@
       }
     },
     "cv": {
-      "download": "Shafin-resume.pdf"
+      "download": "Shafin_Khan_Resume.pdf"
     },
     "cta": {
       "primary": {
         "text": "Download CV",
-        "url": "/static/documents/Shafin-resume.pdf",
+        "url": "/static/documents/Shafin_Khan_FlowCV_Resume_2026-11-03.pdf",
         "icon": "mdi:download",
         "ariaLabel": "Download CV as PDF"
       },
@@ -821,7 +827,7 @@
         {
           "name": "LinkedIn",
           "class": "mdi:linkedin",
-          "value": "in/your-linkedin-username",
+          "value": "shafinkhan29",
           "link": "https://www.linkedin.com/in/shafinkhan29/"
         },
         {

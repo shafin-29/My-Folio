@@ -7,16 +7,15 @@ import { stationForPath } from 'components/World/routes';
 
 import {
   backArc,
-  barRadius,
   cutWidth,
   frontArc,
-  letterH,
-  letterL,
   markBounds,
   markHeight,
   markWidth,
   moonPoint,
   orbitPath,
+  pathK,
+  pathS,
   ring,
   ringWidth,
   stationSlots,
@@ -37,16 +36,6 @@ function notchPath(angle: number) {
   const a = moonPoint(angle - notchHalf);
   const b = moonPoint(angle + notchHalf);
   return `M ${a.x.toFixed(2)} ${a.y.toFixed(2)} A ${ring.rx} ${ring.ry} 0 0 1 ${b.x.toFixed(2)} ${b.y.toFixed(2)}`;
-}
-
-function Bars({ letter }: { letter: typeof letterL }) {
-  return (
-    <>
-      {letter.map(([x, y, width, height]) => (
-        <rect key={`${x}-${y}`} x={x} y={y} width={width} height={height} rx={barRadius} />
-      ))}
-    </>
-  );
 }
 
 /** The moon and its ghosts, drawn in both halves of the ring (each clipped to its half) */
@@ -80,7 +69,7 @@ function Moons({ at, orbit, filter }: { at: number; orbit: boolean; filter: stri
 }
 
 /**
- * The LH orbital monogram (geometry in markGeometry.ts), as SVG: the
+ * The SK orbital monogram (geometry in markGeometry.ts), as SVG: the
  * header's logo until the 3D model takes over (HeaderMark), and wherever
  * WebGL isn't used. Live, it moves as markMotion.ts says: the moon orbits,
  * slipping behind the letters, faster with a trail during flights, free roam
@@ -212,8 +201,8 @@ export function BrandMark({
         </g>
       </g>
       <g fill={`url(#${id}-letters)`} mask={`url(#${id}-cut)`}>
-        <Bars letter={letterL} />
-        <Bars letter={letterH} />
+        <path d={pathS} />
+        <path d={pathK} />
       </g>
       <g transform={tilt}>
         <path

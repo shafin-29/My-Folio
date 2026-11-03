@@ -16,12 +16,12 @@ export const metadata: Metadata = pageMetadata({ path: '/contact', title, descri
 
 export default async function ContactPage() {
   const pageData: ResumeData = await getPageContent();
-  const { contact } = pageData;
+  const { contact, global } = pageData;
 
   return (
     <>
       <PageJsonLd path="/contact" name="Contact" description={description} type="ContactPage" />
-      <Contact contact={contact} />
+      <Contact contact={contact} location={global.location} />
     </>
   );
 }

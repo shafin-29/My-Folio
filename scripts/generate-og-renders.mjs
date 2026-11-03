@@ -12,9 +12,10 @@
  */
 import { mkdir, readdir, readFile, writeFile } from 'fs/promises';
 import path from 'path';
+import { fileURLToPath } from 'url';
 import { chromium } from '@playwright/test';
 
-const root = new URL('..', import.meta.url).pathname;
+const root = fileURLToPath(new URL('..', import.meta.url));
 const source = path.join(root, 'public/static/images/illustrations');
 const out = path.join(root, 'app/_og/renders');
 const maxSize = 480;

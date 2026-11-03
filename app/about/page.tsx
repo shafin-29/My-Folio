@@ -10,7 +10,7 @@ import type { Metadata } from 'next';
 
 const title = 'About: Freelance Full Stack Developer';
 const description =
-  'Senior full stack engineer based in Peterborough, UK. Nine years shipping React, Next.js & Azure at IBM, ADP, ERGO.';
+  'Senior full stack engineer based in Mumbai, India. Two years shipping React, Next.js & Azure.';
 
 export const metadata: Metadata = pageMetadata({ path: '/about', title, description });
 

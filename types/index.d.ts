@@ -174,7 +174,7 @@ export interface Footer {
   navigateText: string;
   elsewhereText: string;
   connectText: string;
-  version: string;
+  version?: string;
   madeInPrefix: string;
   copyright: string;
   builtWith: {

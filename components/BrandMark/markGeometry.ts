@@ -1,8 +1,8 @@
 /* ------------------------------------------------------------------
-   The LH orbital monogram: bold geometric L and H with a tilted ring
+   The SK orbital monogram: bold geometric S and K with a tilted ring
    round them and a moon on it. Depth, front to back: the ring's near
    half (cutting a gap where it crosses the letters: diagonally through
-   the L's foot and across the H), the letters, the ring's far half. So
+   the S and across the K), the letters, the ring's far half. So
    the ring passes in front of the letters low down and behind them at
    the top, and the moon slips behind them as it comes round.
    One geometry for every use: the live header mark (BrandMark.tsx), the
@@ -46,46 +46,72 @@ export function moonPoint(angle: number) {
   };
 }
 
-type Bar = readonly [x: number, y: number, width: number, height: number];
-
-/** The letters as rounded bars, each letter drawn as one shape */
-export const letterL: readonly Bar[] = [
-  [14, 12, 7.5, 30],
-  [14, 34.5, 18, 7.5],
-];
-export const letterH: readonly Bar[] = [
-  [36.5, 12, 7.5, 30],
-  [50.5, 12, 7.5, 30],
-  [43, 23.25, 8, 7],
-];
 export const barRadius = 1.8;
 
-/** Each letter's outline (SVG units, clockwise), for the 3D mark's extrusion */
-export const outlineL: readonly (readonly [number, number])[] = [
+/** Each letter's outline (SVG units, clockwise), for the 3D mark's extrusion and 2D SVG paths */
+export const outlineS: readonly (readonly [number, number])[] = [
   [14, 12],
-  [21.5, 12],
-  [21.5, 34.5],
-  [32, 34.5],
+  [32, 12],
+  [32, 18.5],
+  [21.5, 18.5],
+  [21.5, 24],
+  [32, 24],
   [32, 42],
   [14, 42],
+  [14, 35.5],
+  [24.5, 35.5],
+  [24.5, 30],
+  [14, 30],
 ];
-export const outlineH: readonly (readonly [number, number])[] = [
+
+export const outlineK: readonly (readonly [number, number])[] = [
   [36.5, 12],
   [44, 12],
-  [44, 23.25],
-  [50.5, 23.25],
+  [44, 21],
   [50.5, 12],
   [58, 12],
+  [47.5, 27],
   [58, 42],
   [50.5, 42],
-  [50.5, 30.25],
-  [44, 30.25],
+  [44, 33],
   [44, 42],
   [36.5, 42],
 ];
+
+/**
+ * Turns a polygon outline into a closed SVG path with rounded corners (radius r),
+ * matching Three.js Shape.quadraticCurveTo in BrandMark3D.
+ */
+export function pointsToPath(
+  points: readonly (readonly [number, number])[],
+  r: number = barRadius
+): string {
+  const toward = (p: readonly [number, number], q: readonly [number, number]) => {
+    const dx = q[0] - p[0];
+    const dy = q[1] - p[1];
+    const length = Math.hypot(dx, dy);
+    const k = Math.min(r, length / 2) / length;
+    return [p[0] + dx * k, p[1] + dy * k] as const;
+  };
+  let d = '';
+  points.forEach((point, i) => {
+    const before = points[(i + points.length - 1) % points.length];
+    const after = points[(i + 1) % points.length];
+    const a = toward(point, before);
+    const b = toward(point, after);
+    if (i === 0) d += `M ${a[0].toFixed(2)} ${a[1].toFixed(2)}`;
+    else d += ` L ${a[0].toFixed(2)} ${a[1].toFixed(2)}`;
+    d += ` Q ${point[0]} ${point[1]} ${b[0].toFixed(2)} ${b[1].toFixed(2)}`;
+  });
+  return d + ' Z';
+}
+
+export const pathS = pointsToPath(outlineS);
+export const pathK = pointsToPath(outlineK);
+
 /** The letters' centre (the 3D mark's origin) */
 export const lettersCentre = { x: 36, y: 27 } as const;
-/** Ring and cut widths: the cut is the gap the near half leaves in the H */
+/** Ring and cut widths: the cut is the gap the near half leaves in the letters */
 export const ringWidth = 2.4;
 export const cutWidth = 5.4;
 
@@ -138,12 +164,6 @@ export function brandMarkSvg({
   const x0 = round((markWidth - span) / 2);
   const y0 = round((markHeight - span) / 2);
   const point = moonPoint(moon);
-  const bars = (letter: readonly Bar[]) =>
-    letter
-      .map(
-        ([x, y, w, h]) => `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${barRadius}"/>`
-      )
-      .join('');
   const behind = Math.sin(moon) < 0;
   const moonDot = `<circle cx="${point.x}" cy="${point.y}" r="${small ? 4.6 : 3.4}" class="m" fill="${colors.moon}"/>`;
   const ringStroke = small ? 3.8 : ringWidth;
@@ -161,15 +181,15 @@ export function brandMarkSvg({
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="${x0} ${y0} ${span} ${span}">
   ${style}
   <defs>
-    <linearGradient id="lh-letters" gradientUnits="userSpaceOnUse" x1="14" y1="12" x2="58" y2="42">
+    <linearGradient id="sk-letters" gradientUnits="userSpaceOnUse" x1="14" y1="12" x2="58" y2="42">
       <stop offset="0" class="v" stop-color="${colors.violet}"/>
       <stop offset="1" class="c" stop-color="${colors.cyan}"/>
     </linearGradient>
-    <linearGradient id="lh-ring" gradientUnits="userSpaceOnUse" x1="${cx - rx}" y1="0" x2="${cx + rx}" y2="0">
+    <linearGradient id="sk-ring" gradientUnits="userSpaceOnUse" x1="${cx - rx}" y1="0" x2="${cx + rx}" y2="0">
       <stop offset="0" class="c" stop-color="${colors.cyan}"/>
       <stop offset="1" class="v" stop-color="${colors.violet}"/>
     </linearGradient>
-    <mask id="lh-cut" maskUnits="userSpaceOnUse" x="${x0}" y="${y0}" width="${span}" height="${span}">
+    <mask id="sk-cut" maskUnits="userSpaceOnUse" x="${x0}" y="${y0}" width="${span}" height="${span}">
       <rect x="${x0}" y="${y0}" width="${span}" height="${span}" fill="#fff"/>
       <path d="${frontArc}" transform="${tiltTransform}" fill="none" stroke="#000" stroke-width="${cutStroke}"/>
     </mask>
@@ -179,9 +199,12 @@ export function brandMarkSvg({
     ${small ? '' : `<path d="${backArc}" fill="none" class="r" stroke="${colors.ring}" stroke-opacity="0.45" stroke-width="1.8"/>`}
     ${behind ? moonDot : ''}
   </g>
-  <g fill="url(#lh-letters)" mask="url(#lh-cut)">${bars(letterL)}${bars(letterH)}</g>
+  <g fill="url(#sk-letters)" mask="url(#sk-cut)">
+    <path d="${pathS}"/>
+    <path d="${pathK}"/>
+  </g>
   <g transform="${tiltTransform}">
-    <path d="${frontArc}" fill="none" stroke="url(#lh-ring)" stroke-width="${ringStroke}" stroke-linecap="round"/>
+    <path d="${frontArc}" fill="none" stroke="url(#sk-ring)" stroke-width="${ringStroke}" stroke-linecap="round"/>
     ${behind ? '' : moonDot}
   </g>
 </svg>`;

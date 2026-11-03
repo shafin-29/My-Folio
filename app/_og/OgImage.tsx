@@ -64,7 +64,7 @@ function loadFonts() {
 
 const mono = { fontFamily: 'Geist Mono' } as const;
 
-/** The LH orbital monogram, as the header draws it (satori reads SVG images) */
+/** The SK orbital monogram, as the header draws it (satori reads SVG images) */
 const markUri = `data:image/svg+xml;base64,${Buffer.from(
   brandMarkSvg({ size: 160, pad: 0.02 })
 ).toString('base64')}`;

@@ -8,15 +8,15 @@
         }
       </style>
   <defs>
-    <linearGradient id="lh-letters" gradientUnits="userSpaceOnUse" x1="14" y1="12" x2="58" y2="42">
+    <linearGradient id="sk-letters" gradientUnits="userSpaceOnUse" x1="14" y1="12" x2="58" y2="42">
       <stop offset="0" class="v" stop-color="#a78bfa"/>
       <stop offset="1" class="c" stop-color="#22d3ee"/>
     </linearGradient>
-    <linearGradient id="lh-ring" gradientUnits="userSpaceOnUse" x1="3" y1="0" x2="69" y2="0">
+    <linearGradient id="sk-ring" gradientUnits="userSpaceOnUse" x1="3" y1="0" x2="69" y2="0">
       <stop offset="0" class="c" stop-color="#22d3ee"/>
       <stop offset="1" class="v" stop-color="#a78bfa"/>
     </linearGradient>
-    <mask id="lh-cut" maskUnits="userSpaceOnUse" x="-1.44" y="-11.44" width="74.88" height="74.88">
+    <mask id="sk-cut" maskUnits="userSpaceOnUse" x="-1.44" y="-11.44" width="74.88" height="74.88">
       <rect x="-1.44" y="-11.44" width="74.88" height="74.88" fill="#fff"/>
       <path d="M 69 24.5 A 33 9 0 0 1 3 24.5" transform="rotate(-21 36 24.5)" fill="none" stroke="#000" stroke-width="7.4"/>
     </mask>
@@ -26,9 +26,12 @@
     
     
   </g>
-  <g fill="url(#lh-letters)" mask="url(#lh-cut)"><rect x="14" y="12" width="7.5" height="30" rx="1.8"/><rect x="14" y="34.5" width="18" height="7.5" rx="1.8"/><rect x="36.5" y="12" width="7.5" height="30" rx="1.8"/><rect x="50.5" y="12" width="7.5" height="30" rx="1.8"/><rect x="43" y="23.25" width="8" height="7" rx="1.8"/></g>
+  <g fill="url(#sk-letters)" mask="url(#sk-cut)">
+    <path d="M 14.00 13.80 Q 14 12 15.80 12.00 L 30.20 12.00 Q 32 12 32.00 13.80 L 32.00 16.70 Q 32 18.5 30.20 18.50 L 23.30 18.50 Q 21.5 18.5 21.50 20.30 L 21.50 22.20 Q 21.5 24 23.30 24.00 L 30.20 24.00 Q 32 24 32.00 25.80 L 32.00 40.20 Q 32 42 30.20 42.00 L 15.80 42.00 Q 14 42 14.00 40.20 L 14.00 37.30 Q 14 35.5 15.80 35.50 L 22.70 35.50 Q 24.5 35.5 24.50 33.70 L 24.50 31.80 Q 24.5 30 22.70 30.00 L 15.80 30.00 Q 14 30 14.00 28.20 Z"/>
+    <path d="M 36.50 13.80 Q 36.5 12 38.30 12.00 L 42.20 12.00 Q 44 12 44.00 13.80 L 44.00 19.20 Q 44 21 45.05 19.54 L 49.45 13.46 Q 50.5 12 52.30 12.00 L 56.20 12.00 Q 58 12 56.97 13.47 L 48.53 25.53 Q 47.5 27 48.53 28.47 L 56.97 40.53 Q 58 42 56.20 42.00 L 52.30 42.00 Q 50.5 42 49.45 40.54 L 45.05 34.46 Q 44 33 44.00 34.80 L 44.00 40.20 Q 44 42 42.20 42.00 L 38.30 42.00 Q 36.5 42 36.50 40.20 Z"/>
+  </g>
   <g transform="rotate(-21 36 24.5)">
-    <path d="M 69 24.5 A 33 9 0 0 1 3 24.5" fill="none" stroke="url(#lh-ring)" stroke-width="3.8" stroke-linecap="round"/>
+    <path d="M 69 24.5 A 33 9 0 0 1 3 24.5" fill="none" stroke="url(#sk-ring)" stroke-width="3.8" stroke-linecap="round"/>
     <circle cx="3" cy="24.5" r="4.6" class="m" fill="#ffffff"/>
   </g>
 </svg>

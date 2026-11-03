@@ -7,10 +7,10 @@ const formatTime = () =>
     hour: '2-digit',
     minute: '2-digit',
     second: '2-digit',
-    timeZone: 'Europe/London',
+    timeZone: 'Asia/Kolkata',
   }).format(new Date());
 
-/** Sci-fi readout along the bottom of the hero: home base, UK local time, scroll cue */
+/** Sci-fi readout along the bottom of the hero: home base, Mumbai India local time, scroll cue */
 export function HeroHud({ location }: { location: string }) {
   const [time, setTime] = useState<string | null>(null);
 

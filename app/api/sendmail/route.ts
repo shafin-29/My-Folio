@@ -4,8 +4,8 @@ import { createTransport } from 'nodemailer';
 import { cleanDisplayName, contactLimits, validateContactPayload } from 'utils/contactValidation';
 import { clientIp, createRateLimiter } from 'utils/rateLimit';
 
-const senderEmail = 'portfolio@ShafinKhan.com';
-const receiverEmail = 'ShafinKhan@gmail.com';
+const senderEmail = process.env.SMTP_EMAIL || 'shafinkhan2829@gmail.com';
+const receiverEmail = process.env.SMTP_EMAIL || 'shafinkhan2829@gmail.com';
 const emailSubject = 'New Portfolio Message';
 
 // 5 messages per visitor per 10 minutes is generous for people and dull for bots

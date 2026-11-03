@@ -1,6 +1,6 @@
 import { ogContentType, ogSize, renderOgImage } from '@/app/_og/OgImage';
 
-export const alt = 'About Shafin Khan, senior full stack engineer in Peterborough, UK';
+export const alt = 'About Shafin Khan, senior full stack engineer in Mumbai, UK';
 export const size = ogSize;
 export const contentType = ogContentType;
 
@@ -11,7 +11,7 @@ export default function OpenGraphImage() {
     title: 'About',
     accent: 'me',
     description:
-      'Senior full stack engineer based in Peterborough, UK. Nine years shipping React, Next.js & Azure.',
+      'Senior full stack engineer based in Mumbai, India. two years shipping React, Next.js & Azure.',
     render: 'helmet',
   });
 }

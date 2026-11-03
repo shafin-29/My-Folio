@@ -8,7 +8,7 @@ export const siteUrl =
 export const personName = content.home?.name || 'Portfolio';
 
 export const siteDescription =
-  'Freelance React & Next.js developer, Peterborough UK. Senior full stack engineer. 9+ years at IBM, ADP & ERGO. Remote contracts across the UK and Europe.';
+  'Freelance React & Next.js developer, Mumbai, India. Senior full stack engineer. 2+ years of shipping react & nextjs. Remote contracts worldwide.';
 
 // Bump in content.json (global.contentUpdated) whenever site content meaningfully changes;
 // feeds sitemap lastModified and ProfilePage dateModified.

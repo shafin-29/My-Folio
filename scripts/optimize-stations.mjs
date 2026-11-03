@@ -33,8 +33,9 @@ import {
 import { ktx2 } from 'ktx2-encoder/gltf-transform';
 import { MeshoptEncoder, MeshoptSimplifier } from 'meshoptimizer';
 import sharp from 'sharp';
+import { fileURLToPath } from 'url';
 
-const root = new URL('..', import.meta.url).pathname;
+const root = fileURLToPath(new URL('..', import.meta.url));
 const [rawDir, outDir = path.join(root, 'public/static/models/stations')] = process.argv.slice(2);
 
 if (!rawDir) {

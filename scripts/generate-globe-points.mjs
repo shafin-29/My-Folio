@@ -11,11 +11,12 @@
 import { readFile, writeFile } from 'fs/promises';
 import path from 'path';
 import { createRequire } from 'module';
+import { fileURLToPath } from 'url';
 import { feature } from 'topojson-client';
 import { geoContains } from 'd3-geo';
 
 const require = createRequire(import.meta.url);
-const root = new URL('..', import.meta.url).pathname;
+const root = fileURLToPath(new URL('..', import.meta.url));
 const out = path.join(root, 'components/World/data/globePoints.json');
 const samples = 16000;
 

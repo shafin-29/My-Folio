@@ -12,8 +12,7 @@ import { Footer as FooterProps, NavItem } from '@/types';
 import './Footer.scss';
 
 export const Footer = ({ footer, navItems }: { footer: FooterProps; navItems: NavItem[] }) => {
-  const { tagline, social, name, home, connectText, navigateText, builtWith, cta, version } =
-    footer;
+  const { tagline, social, name, home, connectText, navigateText, builtWith, cta } = footer;
 
   return (
     <footer className="footer">
@@ -84,7 +83,6 @@ export const Footer = ({ footer, navItems }: { footer: FooterProps; navItems: Na
       <div className="footer__bottom">
         <p className="footer__copy">
           &copy; {new Date().getFullYear()} {name}
-          <span className="footer__version">{version}</span>
         </p>
         <p className="footer__built">
           {builtWith.pretext}

@@ -60,7 +60,7 @@ export const About = ({
         title={title}
         accent="me"
         illustration={illustrations.helmet}
-        sub={`Senior full stack engineer · ${location} · shipping production software since 2018.`}
+        sub={`Applied AI engineer · ${location} · shipping production software since 2023.`}
       />
 
       <div className="about__grid">

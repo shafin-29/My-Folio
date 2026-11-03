@@ -20,20 +20,20 @@ import {
 } from 'three';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
 
-import { lettersCentre, outlineH, outlineL, ring } from './markGeometry';
+import { lettersCentre, outlineK, outlineS, ring } from './markGeometry';
 import { createMarkMotion } from './markMotion';
 
 import type { BufferGeometry, Scene, Texture, WebGLRenderer } from 'three';
 import type { MarkPose } from './markMotion';
 
 /* ------------------------------------------------------------------
-   The LH orbital monogram as a real 3D model, for the header (see
+   The SK orbital monogram as a real 3D model, for the header (see
    HeaderMark, which swaps it in for the SVG once the 3D world is up).
    Same geometry as markGeometry.ts, in its units with y up and the
    letters' centre at the origin: the letters are extruded and bevelled,
    the ring is a torus inclined so it projects to the SVG's ellipse, so
    the depth buffer does the passing in front of the letters low down
-   (through the L's foot and across the H) and behind them at the top. The moon and
+   (through the S and across the K) and behind them at the top. The moon and
    the station notch move as in markMotion.ts; the whole mark sways
    slowly and leans towards the pointer while it hovers.
    ------------------------------------------------------------------ */
@@ -173,8 +173,8 @@ function buildAssets(theme: Theme) {
     });
   return {
     glowMap,
-    letterL: letterGeometry(outlineL, theme),
-    letterH: letterGeometry(outlineH, theme),
+    letterS: letterGeometry(outlineS, theme),
+    letterK: letterGeometry(outlineK, theme),
     // Cyan at the ring's left end to violet at its right, as the SVG
     ring: paint(
       new TorusGeometry(ring.rx, 0.95, 16, 220),
@@ -204,7 +204,7 @@ type Assets = ReturnType<typeof buildAssets>;
 
 function disposeAssets(assets: Assets) {
   assets.glowMap.dispose();
-  for (const geometry of [assets.letterL, assets.letterH, assets.ring, assets.notch]) {
+  for (const geometry of [assets.letterS, assets.letterK, assets.ring, assets.notch]) {
     geometry.dispose();
   }
   for (const material of [
@@ -302,8 +302,8 @@ function Mark({
 
   return (
     <group ref={swayRef}>
-      <mesh geometry={assets.letterL} material={assets.letters} />
-      <mesh geometry={assets.letterH} material={assets.letters} />
+      <mesh geometry={assets.letterS} material={assets.letters} />
+      <mesh geometry={assets.letterK} material={assets.letters} />
       <group position={[0, ringCentreY, 0]} rotation={[0, 0, tilt]}>
         <group rotation={[-inclination, 0, 0]}>
           <mesh geometry={assets.ring} material={assets.ringMaterial} />

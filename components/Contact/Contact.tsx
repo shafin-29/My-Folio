@@ -20,12 +20,12 @@ import './Contact.scss';
 
 const toastAutoDismissMs = 8000;
 
-/** When a message landed, in UK time (where it's read) */
+/** When a message landed, in Mumbai India time (where it's read) */
 const receivedTime = () =>
   new Intl.DateTimeFormat('en-GB', {
     hour: '2-digit',
     minute: '2-digit',
-    timeZone: 'Europe/London',
+    timeZone: 'Asia/Kolkata',
   }).format(new Date());
 
 const ContactCard = ({ info }: { info: ContactInfo }) => {
@@ -97,7 +97,13 @@ const ContactCard = ({ info }: { info: ContactInfo }) => {
   );
 };
 
-export const Contact = ({ contact }: { contact: ContactProps }) => {
+export const Contact = ({
+  contact,
+  location = 'Mumbai, India',
+}: {
+  contact: ContactProps;
+  location?: string;
+}) => {
   const {
     label,
     tagline,
@@ -165,7 +171,7 @@ export const Contact = ({ contact }: { contact: ContactProps }) => {
           </address>
 
           <Reveal delay={0.2}>
-            <LocationMap location="Peterborough, UK" />
+            <LocationMap location={location} />
           </Reveal>
         </aside>
 
@@ -197,7 +203,7 @@ export const Contact = ({ contact }: { contact: ContactProps }) => {
                 <p className="contact__success-eyebrow">Transmission received</p>
                 {receivedAt && (
                   <p className="contact__success-log">
-                    Logged {receivedAt} UK time · relayed by the comms array to Peterborough
+                    Logged {receivedAt} IST · relayed by the comms array to {location.split(',')[0]}
                   </p>
                 )}
                 <h2 className="contact__success-title">{success.headerText}</h2>

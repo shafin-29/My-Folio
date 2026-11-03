@@ -15,8 +15,9 @@
 import { execFileSync } from 'child_process';
 import { readdirSync, statSync, mkdirSync } from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
 
-const root = new URL('..', import.meta.url).pathname;
+const root = fileURLToPath(new URL('..', import.meta.url));
 const [rawDir, outDir = path.join(root, 'public/static/models')] = process.argv.slice(2);
 
 if (!rawDir) {

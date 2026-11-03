@@ -26,7 +26,7 @@ import { setUniform } from '../utils';
 import type { NavLight } from '../parts';
 import type { WorldPalette, WorldTheme } from '../utils';
 
-const astronautTip = { label: 'Hello from Peterborough 👋', sub: 'Click for a barrel roll' };
+const astronautTip = { label: 'Hello from Mumbai 👋', sub: 'Click for a barrel roll' };
 
 const hubLights: NavLight[] = [
   // Wing tips (port red, starboard green), mast and keel strobes, hull accents

@@ -1,5 +1,5 @@
 /**
- * Draws the site's icons from the LH orbital monogram
+ * Draws the site's icons from the SK orbital monogram
  * (components/BrandMark/markGeometry.ts), so they always match the header:
  *
  *   app/icon.svg        browser tabs: the small variant, light or dark with the OS

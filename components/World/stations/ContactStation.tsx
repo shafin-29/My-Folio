@@ -55,17 +55,17 @@ const arrayLights: NavLight[] = [
 ];
 
 const radius = 2.25;
-const home = { lat: 52.57, lng: -0.24 };
-// UK & EU remote — arcs from Peterborough to a handful of European hubs
+const home = { lat: 19.076, lng: 72.8777 };
+// Remote / On-site · Worldwide — arcs from Mumbai to major global tech hubs
 const cities = [
-  { lat: 52.37, lng: 4.9 },
-  { lat: 52.52, lng: 13.4 },
-  { lat: 38.72, lng: -9.14 },
-  { lat: 41.39, lng: 2.17 },
-  { lat: 59.33, lng: 18.07 },
-  { lat: 53.35, lng: -6.26 },
-  { lat: 48.86, lng: 2.35 },
-  { lat: 48.14, lng: 11.58 },
+  { lat: 51.5074, lng: -0.1278 }, // London
+  { lat: 37.7749, lng: -122.4194 }, // San Francisco
+  { lat: 40.7128, lng: -74.006 }, // New York
+  { lat: 35.6762, lng: 139.6503 }, // Tokyo
+  { lat: 1.3521, lng: 103.8198 }, // Singapore
+  { lat: 25.2048, lng: 55.2708 }, // Dubai
+  { lat: 52.52, lng: 13.4 }, // Berlin
+  { lat: 12.9716, lng: 77.5946 }, // Bengaluru
 ];
 
 const dotVertex = /* glsl */ `
@@ -103,7 +103,7 @@ const dotFragment = /* glsl */ `
   }
 `;
 
-/** The transmission: packets streaming from the dish to the Peterborough pin */
+/** The transmission: packets streaming from the dish to the Mumbai pin */
 const packetCount = 28;
 /** Seconds the stream shows at least, so a fast send is still seen */
 const transmitHold = 1.8;
@@ -273,7 +273,7 @@ function buildArcs() {
   });
 }
 
-const globeTip = { label: 'Peterborough, UK', sub: 'Drag to spin the globe' };
+const globeTip = { label: 'Mumbai, India', sub: 'Drag to spin the globe' };
 const rocketTip = { label: 'Ready for launch', sub: 'Send a message to fire it, or click to rev' };
 /** Seconds the rocket's rev (a hop and a burst of exhaust) takes */
 const revTime = 1;
@@ -423,7 +423,7 @@ function lightUp(
 }
 
 /**
- * `/contact` — dotted holo-globe with a Peterborough beacon, a comms array
+ * `/contact` — dotted holo-globe with a Mumbai beacon, a comms array
  * that streams a message to the beacon while it sends, and a rocket that
  * launches once it has landed
  */
@@ -530,9 +530,8 @@ export function ContactStation({ theme }: { theme: WorldTheme }) {
         spin.velocity *= Math.exp(-1.6 * dt);
         spin.pitch = MathUtils.damp(spin.pitch, 0, 1.2, dt);
       }
-      globe.rotation.y =
-        -Math.PI / 2 + Math.sin(t * 0.12) * 0.35 + worldStore.pointerX * 0.2 + spin.yaw;
-      globe.rotation.x = 0.62 + worldStore.pointerY * 0.08 + spin.pitch;
+      globe.rotation.y = -2.84 + Math.sin(t * 0.12) * 0.35 + worldStore.pointerX * 0.2 + spin.yaw;
+      globe.rotation.x = 0.25 + worldStore.pointerY * 0.08 + spin.pitch;
     }
 
     // Transmitting: packets stream along an arc over the globe to the pin
@@ -575,7 +574,7 @@ export function ContactStation({ theme }: { theme: WorldTheme }) {
   return (
     <StationScope station="contact">
       <group ref={groupRef} position={stationPositions.contact}>
-        <group ref={globeRef} position={[0, 0.5, 0]} rotation={[0.62, -Math.PI / 2, 0]}>
+        <group ref={globeRef} position={[0, 0.5, 0]} rotation={[0.25, -2.84, 0]}>
           <mesh
             onPointerDown={(e) => startSpin(spinRef.current, e)}
             onPointerOver={(e) => {

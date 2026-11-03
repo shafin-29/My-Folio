@@ -210,13 +210,6 @@
     color: var(--text-muted);
   }
 
-  &__version {
-    margin-left: 0.75rem;
-    padding: 0.15rem 0.5rem;
-    border-radius: var(--radius-pill);
-    border: 1px solid var(--border-color);
-  }
-
   &__built {
     display: inline-flex;
     align-items: center;

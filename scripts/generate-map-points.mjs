@@ -15,35 +15,36 @@
 import { readFile, writeFile } from 'fs/promises';
 import path from 'path';
 import { createRequire } from 'module';
+import { fileURLToPath } from 'url';
 import { feature } from 'topojson-client';
 import { geoContains } from 'd3-geo';
 
 const require = createRequire(import.meta.url);
-const root = new URL('..', import.meta.url).pathname;
+const root = fileURLToPath(new URL('..', import.meta.url));
 const out = path.join(root, 'components/Contact/LocationMap/mapData.json');
 
 // Region (degrees) and grid density (viewBox units)
-const bounds = { west: -11, east: 15, south: 47.9, north: 59.1 };
+const bounds = { west: 68, east: 86, south: 9, north: 27 };
 const width = 480;
 const step = 8;
 const rowStep = 7;
 
-// Peterborough, where the beacon sits
+// Mumbai, where the beacon sits
 const places = {
-  home: [52.57, -0.24],
+  home: [19.076, 72.8777],
 };
 
 // Faint chart lines (degrees)
-const graticule = { lat: [50, 52.5, 55, 57.5], lng: [-10, -5, 0, 5, 10] };
+const graticule = { lat: [12, 16, 20, 24], lng: [70, 75, 80, 85] };
 
-const ukId = '826';
+const countryId = '356';
 
 const read = async (file) => JSON.parse(await readFile(require.resolve(file), 'utf-8'));
 const landTopology = await read('world-atlas/land-50m.json');
 const countryTopology = await read('world-atlas/countries-50m.json');
 const land = feature(landTopology, landTopology.objects.land);
-const uk = feature(countryTopology, countryTopology.objects.countries).features.find(
-  (country) => String(country.id) === ukId
+const country = feature(countryTopology, countryTopology.objects.countries).features.find(
+  (c) => String(c.id) === countryId
 );
 
 // Equirectangular, with longitude squeezed for the region's mid latitude
@@ -56,15 +57,18 @@ const unproject = (x, y) => [bounds.west + x / (squeeze * scale), bounds.north -
 
 const rows = { uk: [], land: [] };
 for (let y = rowStep / 2, row = 0; y < height; y += rowStep, row++) {
-  const ukRow = [];
+  const countryRow = [];
   const landRow = [];
   // Offset every other row by half a step for an even, hex-like weave
   for (let x = row % 2 ? step : step / 2; x < width; x += step) {
     const point = unproject(x, y);
-    if (!geoContains(land, point)) continue;
-    (geoContains(uk, point) ? ukRow : landRow).push(x);
+    if (geoContains(country, point)) {
+      countryRow.push(x);
+    } else if (geoContains(land, point)) {
+      landRow.push(x);
+    }
   }
-  if (ukRow.length) rows.uk.push([y, ukRow]);
+  if (countryRow.length) rows.uk.push([y, countryRow]);
   if (landRow.length) rows.land.push([y, landRow]);
 }
 
@@ -92,5 +96,5 @@ const data = {
 await writeFile(out, `${JSON.stringify(data, null, 2)}\n`);
 const count = (set) => set.reduce((sum, [, xs]) => sum + xs.length, 0);
 console.log(
-  `wrote ${count(rows.uk)} UK + ${count(rows.land)} land dots (${width}×${height}) to ${path.relative(root, out)}`
+  `wrote ${count(rows.uk)} India + ${count(rows.land)} land dots (${width}×${height}) to ${path.relative(root, out)}`
 );
